@@ -29,6 +29,7 @@ const MapView = ({ placeName, location, apiKey }) => {
             height="200"
             className="rounded-lg shadow-md"
             src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(location + " " + placeName)}&zoom=15`}
+            title={`Map showing location of ${placeName}`}
             allowFullScreen
           />
         )}

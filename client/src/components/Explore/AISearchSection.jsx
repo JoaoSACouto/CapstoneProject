@@ -19,19 +19,7 @@ const AISearchSection = ({
   const envValue = import.meta.env.VITE_ENABLE_AI_SEARCH
   const isAIEnabled = envValue === 'true'
 
-  // Debug logging
-  /*  console.log('AI Environment Check:', { 
-    envValue, 
-    isAIEnabled, 
-    envType: typeof envValue 
-  }) */
-
-  // Early return if AI is disabled
-  if (!isAIEnabled) {
-    // console.log('AI component hidden - environment variable not enabled')
-    return null
-  }
-  // AI Search functionality
+  // AI Search functionality - must be called before any early returns
   const {
     loading: aiLoading,
     error: aiError,
@@ -45,6 +33,26 @@ const AISearchSection = ({
     hasResults: hasAIResults,
     isEmpty: aiIsEmpty,
   } = useAISearch()
+
+  // Clear AI results when new regular search happens
+  React.useEffect(() => {
+    if (hasSearched && !loading && aiHasSearched) {
+      clearAIResults()
+    }
+  }, [searchTerm, hasSearched, loading, aiHasSearched, clearAIResults])
+
+  // Debug logging
+  /*  console.log('AI Environment Check:', { 
+    envValue, 
+    isAIEnabled, 
+    envType: typeof envValue 
+  }) */
+
+  // Early return if AI is disabled
+  if (!isAIEnabled) {
+    // console.log('AI component hidden - environment variable not enabled')
+    return null
+  }
 
   // Check if we should show AI Assistant button
   const shouldShowAIButton =
@@ -75,13 +83,6 @@ const AISearchSection = ({
       onSearch(suggestion)
     }
   }
-
-  // Clear AI results when new regular search happens
-  React.useEffect(() => {
-    if (hasSearched && !loading && aiHasSearched) {
-      clearAIResults()
-    }
-  }, [searchTerm, hasSearched, loading, aiHasSearched, clearAIResults])
 
   return (
     <>

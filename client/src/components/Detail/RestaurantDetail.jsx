@@ -112,9 +112,9 @@ const RestaurantDetail = ({ post, loading, error, className, refetch }) => {
         {/* Call-to-Action for Visitors */}
         {!isLoggedIn && (
           <div className='mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200'>
-            <h3 className='text-xl font-semibold text-gray-900 mb-3 text-center'>
+            <h2 className='text-xl font-semibold text-gray-900 mb-3 text-center'>
               Join RestJAM to Connect with Food Lovers!
-            </h3>
+            </h2>
             <p className='text-gray-600 text-center mb-4'>
               Sign up to like posts, join restaurant visits, and share your own
               food experiences.
@@ -139,9 +139,9 @@ const RestaurantDetail = ({ post, loading, error, className, refetch }) => {
         {/* More Info Section - Always show basic info */}
         <div className='mt-12'>
           <div className='text-gray-600 text-base mb-4 divider'>More Info</div>
-          <h3 className='text-lg font-semibold text-gray-900 mb-3 px-2 lg:px-20'>
+          <h2 className='text-lg font-semibold text-gray-900 mb-3 px-2 lg:px-20'>
             Poster
-          </h3>
+          </h2>
           <PostMeta
             author={post.author}
             rating={post.rating?.type}
@@ -154,10 +154,10 @@ const RestaurantDetail = ({ post, loading, error, className, refetch }) => {
         {/* Attendees teaser for visitors */}
         {!isLoggedIn && post.attendees && post.attendees.length > 0 && (
           <div className='mt-6 px-2 lg:px-20'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-3'>
+            <h2 className='text-lg font-semibold text-gray-900 mb-3'>
               {post.attendees.length}{' '}
               {post.attendees.length === 1 ? 'Person' : 'People'} Want to Go
-            </h3>
+            </h2>
             <div className='p-4 bg-gray-50 rounded-lg text-center'>
               <p className='text-gray-600 mb-3'>
                 See who else is interested in this restaurant
