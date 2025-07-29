@@ -124,7 +124,8 @@ const Profile = () => {
                 <section className="mt-8">
                     <h3 className="text-lg font-semibold mb-4">My Posts</h3>
                     <p className="text-gray-600 mb-4 text-sm">
-                        Here are the lists of all the recommendations you posted.
+                        Here are the lists of all the recommendations you
+                        posted.
                     </p>
 
                     {myPostsLoading ? (
@@ -136,10 +137,10 @@ const Profile = () => {
                         />
                     ) : (
                         <div className="overflow-x-auto w-full">
-                            <table className="min-w-full text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
+                            <table className="w-7/8 mx-auto text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
                                 <thead className="text-gray-700 uppercase bg-gray-100">
                                     <tr>
-                                        <th className="px-4 py-3">#</th>
+                                        <th className="px-4 py-3">ID</th>
                                         <th className="px-4 py-3">
                                             Restaurant
                                         </th>
@@ -241,7 +242,8 @@ const Profile = () => {
                 <section className="mt-10">
                     <h3 className="text-lg font-semibold">Going List</h3>
                     <p className="text-gray-600 mb-4 text-sm">
-                        Here are the lists of all the restaurants or places you marked as want to go.
+                        Here are the lists of all the restaurants or places you
+                        marked as want to go.
                     </p>
 
                     {goingLoading ? (
@@ -256,15 +258,22 @@ const Profile = () => {
                         <>
                             {/* Desktop Table */}
                             <div className="hidden md:block overflow-x-auto">
-                                <table className="min-w-full text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
-                                    <thead className="text-gray-700 uppercase bg-gray-100">
+                                <table className="table-auto bg-white  rounded-xl text-sm w-7/8 mx-auto border-gray-200 shadow-md overflow-x-auto">
+                                    <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
                                         <tr>
-                                            <th className="px-4 py-3">#</th>
-                                            <th className="px-4 py-3">Title</th>
-                                            <th className="px-4 py-3">
+                                            <th className="px-3 py-2 text-center">
+                                                ID
+                                            </th>
+                                            <th className="px-3 py-2 text-left">
+                                                User
+                                            </th>
+                                            <th className="px-3 py-2  text-left">
+                                                Title
+                                            </th>
+                                            <th className="px-3 py-2  text-left">
                                                 Address
                                             </th>
-                                            <th className="px-4 py-3 text-right">
+                                            <th className="px-3 py-2 text-right">
                                                 Action
                                             </th>
                                         </tr>
@@ -273,23 +282,51 @@ const Profile = () => {
                                         {goingList.map((item, index) => (
                                             <tr
                                                 key={item.id}
-                                                className="odd:bg-gray-50 even:bg-gray-200 hover:bg-gray-200 transition "
+                                                className="odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
                                             >
-                                                <td className="px-4 py-3 font-bold">
+                                                <td className="px-3 py-2 text-center">
                                                     {index + 1}
                                                 </td>
-                                                <td className="px-4 py-3 font-bold">
+
+                                                {/* User Column */}
+                                                <td className="px-3 py-2 flex items-center gap-3">
+                                                    <img
+                                                        src={
+                                                            item.author
+                                                                ?.photoURL ||
+                                                            "https://img.daisyui.com/images/profile/demo/1@94.webp"
+                                                        }
+                                                        alt={
+                                                            item.author
+                                                                ?.displayName ||
+                                                            "User"
+                                                        }
+                                                        className="h-8 w-8 rounded-full object-cover"
+                                                    />
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium truncate">
+                                                            {item.author?.displayName || "Unknown User"}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                        {console.log(item.author.firstName, item.author.lastName)}
+                                                {/* Title */}
+                                                <td className="px-3 py-2 font-semibold truncate">
                                                     {item.title}
                                                 </td>
-                                                <td className="px-4 py-3 font-bold">
+
+                                                {/* Address */}
+                                                <td className="px-3 py-2 text-gray-600 truncate">
                                                     {item.location}
                                                 </td>
-                                                <td className="px-4 py-3 text-right">
+
+                                                {/* Action */}
+                                                <td className="px-3 py-2 text-right">
                                                     <button
                                                         onClick={() =>
                                                             navigate(item.url)
                                                         }
-                                                        className="cursor-pointer bg-purple-700 hover:bg-purple-800 text-white text-xs px-4 py-1 rounded-full"
+                                                        className="bg-purple-700 hover:bg-purple-800 text-white text-xs px-3 py-1 rounded-full"
                                                     >
                                                         Detail
                                                     </button>
@@ -301,10 +338,10 @@ const Profile = () => {
                             </div>
 
                             {/* Mobile Cards */}
-                            <div className="md:hidden rounded-lg bg-white shadow-md">
+                            <div className="md:hidden rounded-lg bg-white shadow-md w-7/8 mx-auto">
                                 {/* Header for mobile */}
                                 <div className="bg-gray-100 text-gray-700 uppercase text-xs font-semibold px-4 py-2 flex justify-between">
-                                    <span className="w-1/4">#</span>
+                                    <span className="w-1/4">ID</span>
                                     <span className="w-2/4 text-center">
                                         Title
                                     </span>
@@ -318,15 +355,18 @@ const Profile = () => {
                                     <div
                                         key={item.id}
                                         className="flex justify-between items-center p-4 odd:bg-gray-50 even:bg-gray-200"
-                                        onClick={() =>
-                                            navigate(item.url)
-                                        }
+                                        onClick={() => navigate(item.url)}
                                     >
                                         <div className="w-3/4">
                                             <p className="text-sm font-bold">
-                                                {index + 1}. {item.title}
+                                                {index + 1}
                                             </p>
-                                            <p className="text-xs text-gray-500 font-bold">
+                                        </div>
+                                        <div className="w-3/4">
+                                            <p className="text-sm font-semibold truncate">
+                                                {item.title}
+                                            </p>
+                                            <p className="text-xs text-gray-600 truncate">
                                                 {item.location}
                                             </p>
                                         </div>
