@@ -74,6 +74,9 @@ This document provides a comprehensive overview of the technology stack used in 
 - **Stripe 18.3.0** - Payment processing platform
 - **@stripe/stripe-js 7.4.0** - Stripe JavaScript SDK
 
+### AI & Machine Learning
+- **@google/generative-ai** - Google Gemini AI SDK for natural language processing
+
 ### Utilities & Development
 - **Lodash 4.17.21** - JavaScript utility library
 - **UUID 11.1.0** - Unique identifier generation
@@ -134,6 +137,13 @@ This document provides a comprehensive overview of the technology stack used in 
 - **CORS Configuration**: Controlled cross-origin resource sharing
 
 ## 🌐 External Services & APIs
+
+### AI & Machine Learning Services
+- **Google Gemini AI** - Generative AI for natural language processing
+  - **Integration**: @google/generative-ai SDK for keyword extraction
+  - **Features**: Natural language query understanding, keyword optimization
+  - **Model**: Gemini-1.5-flash for fast response times
+  - **Fallback**: Graceful degradation to regular search when unavailable
 
 ### Image & Media Management
 - **Cloudinary** - Cloud-based digital asset management
@@ -213,8 +223,9 @@ This document provides a comprehensive overview of the technology stack used in 
 1. **Client**: React components trigger user actions
 2. **Apollo Client**: Caches and manages GraphQL queries/mutations
 3. **GraphQL API**: Apollo Server resolves queries against MongoDB
-4. **Database**: Mongoose models interact with MongoDB
-5. **External Services**: Integration with Firebase, Cloudinary, Stripe
+4. **AI Processing**: Google Gemini AI enhances search queries when needed
+5. **Database**: Mongoose models interact with MongoDB
+6. **External Services**: Integration with Firebase, Cloudinary, Stripe
 
 ---
 
@@ -247,4 +258,10 @@ This document provides a comprehensive overview of the technology stack used in 
 - Comprehensive API and documentation
 - Strong Canadian market support
 
-This technology stack provides a modern, scalable, and maintainable foundation for the RestJAM social media platform, with emphasis on developer experience, performance, and user security.
+**AI Choice (Google Gemini)**:
+- Advanced natural language understanding capabilities
+- Fast response times with Gemini-1.5-flash model
+- Cost-effective for search enhancement use cases
+- Reliable Google Cloud infrastructure
+
+This technology stack provides a modern, scalable, and maintainable foundation for the RestJAM social media platform, with emphasis on developer experience, performance, user security, and intelligent search capabilities.
