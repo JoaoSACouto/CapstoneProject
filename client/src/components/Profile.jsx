@@ -33,6 +33,7 @@ const Profile = () => {
         goingList,
         loading: goingLoading,
         error: goingError,
+        refetch: refetchGoingList,
     } = useMyWantToGoPosts();
 
     const { deletePost } = useDeletePost();
@@ -44,21 +45,33 @@ const Profile = () => {
 
     const handleRemove = async (postId) => {
         const confirmed = await confirmDelete(
-            "Do you want to remove this from your Want to Go list?"
+            "Do you want to remove this post from your Want to Go list?",
+            {
+                type: "remove",
+                title: "Remove Post",
+                confirmText: "Remove",
+                cancelText: "Keep Post",
+            }
         );
         if (!confirmed) return;
 
         try {
             await wantToGoPost({ variables: { postId } });
-            await refetchMyPosts({ fetchPolicy: "network-only" });
+            await refetchGoingList({ fetchPolicy: "network-only" });
         } catch (error) {
-            console.error("Failed to remove from want-to-go list:", error);
+            console.error("Failed to remove from Want to Go list:", error);
         }
     };
 
     const handleDelete = async (postId) => {
         const confirmed = await confirmDelete(
-            "Are you sure you want to delete this post?"
+            "Are you sure you want to delete this post?",
+            {
+                type: "delete",
+                title: "Delete Post",
+                confirmText: "Delete",
+                cancelText: "Cancel",
+            }
         );
         if (!confirmed) return;
 
@@ -278,7 +291,7 @@ const Profile = () => {
                             {/* Desktop Table */}
                             <div className="hidden md:block overflow-x-auto">
                                 <table className="w-7/8 mx-auto text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
-                                <thead className="text-gray-700 uppercase bg-gray-100">
+                                    <thead className="text-gray-700 uppercase bg-gray-100">
                                         <tr>
                                             <th className="px-3 py-2 text-center">
                                                 ID
@@ -352,9 +365,9 @@ const Profile = () => {
                                                                 item.id
                                                             );
                                                         }}
-                                                        className="cursor-pointer bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded-full"
+                                                        className="cursor-pointer bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-3 py-1 rounded-full"
                                                     >
-                                                        Delete
+                                                        Remove
                                                     </button>
                                                 </td>
                                             </tr>
