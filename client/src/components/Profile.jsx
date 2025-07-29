@@ -123,6 +123,9 @@ const Profile = () => {
                 {/* Post List */}
                 <section className="mt-8">
                     <h3 className="text-lg font-semibold mb-4">My Posts</h3>
+                    <p className="text-gray-600 mb-4 text-sm">
+                        Here are the lists of all the recommendations you posted.
+                    </p>
 
                     {myPostsLoading ? (
                         <div className="text-gray-500">Loading posts...</div>
@@ -238,7 +241,7 @@ const Profile = () => {
                 <section className="mt-10">
                     <h3 className="text-lg font-semibold">Going List</h3>
                     <p className="text-gray-600 mb-4 text-sm">
-                        Here are the places you marked as "Want to Go"
+                        Here are the lists of all the restaurants or places you marked as want to go.
                     </p>
 
                     {goingLoading ? (
