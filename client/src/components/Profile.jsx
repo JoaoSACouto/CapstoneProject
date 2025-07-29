@@ -103,7 +103,7 @@ const Profile = () => {
                                 Total want to go
                             </div>
                             <div className="text-3xl md:text-4xl font-bold">
-                                6
+                                {goingList.length}
                             </div>
                         </div>
                     </div>
