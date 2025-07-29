@@ -9,12 +9,16 @@ import ErrorMessage from "./ErrorMessage";
 import { useNavigate } from "react-router-dom";
 import { useDeletePost } from "../hooks/useDeletePost";
 import { useWantToGoPost } from "../hooks/postActions/useWantToGoPost";
+import { Edit, Trash, Loader2 } from "lucide-react";
+import ConfirmDialog from "../components/ConfirmDialog";
+import { useConfirmDialog } from "../hooks/useConfirmDialog";
 
 const Profile = () => {
     const { wantToGoPost, loading: toggleLoading } = useWantToGoPost();
     const { handleSignOut } = useNavbar();
     const user = useSelector((state) => state.user.data);
     const authInitialized = useSelector((state) => state.user.authInitialized);
+    const { confirmDelete, dialogProps } = useConfirmDialog();
 
     // My posts
     const {
@@ -39,27 +43,30 @@ const Profile = () => {
     };
 
     const handleRemove = async (postId) => {
+        const confirmed = await confirmDelete(
+            "Do you want to remove this from your Want to Go list?"
+        );
+        if (!confirmed) return;
+
         try {
             await wantToGoPost({ variables: { postId } });
-            await refetchMyPosts({ fetchPolicy: "network-only" }); 
+            await refetchMyPosts({ fetchPolicy: "network-only" });
         } catch (error) {
             console.error("Failed to remove from want-to-go list:", error);
         }
     };
 
     const handleDelete = async (postId) => {
-        const confirmed = window.confirm(
+        const confirmed = await confirmDelete(
             "Are you sure you want to delete this post?"
         );
         if (!confirmed) return;
 
         try {
-            await deletePost(postId);
-            alert("Post deleted successfully!");
-            refetchMyPosts({ fetchPolicy: "network-only" });
+            await deletePost({ variables: { id: postId } });
+            await refetchMyPosts({ fetchPolicy: "network-only" });
         } catch (error) {
             console.error("Delete failed:", error);
-            alert("Failed to delete the post.");
         }
     };
 
@@ -69,6 +76,7 @@ const Profile = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8">
+            <ConfirmDialog {...dialogProps} loading={toggleLoading} />
             <main className="flex-1">
                 {/* Hero Section */}
                 <Hero
@@ -81,7 +89,7 @@ const Profile = () => {
 
                 {/* Profile Stats */}
                 <div className="mt-6 mb-10 bg-white shadow-md rounded-xl p-6 text-center">
-                    <h2 className="text-xl md:text-2xl font-bold mb-6">
+                    <h2 className="text-xl md:text-2xl font-semibold mb-6">
                         Hello, {user?.displayName || "Guest"}!
                     </h2>
 
@@ -91,7 +99,7 @@ const Profile = () => {
                             <div className="text-gray-500 text-sm">
                                 Total posts
                             </div>
-                            <div className="text-3xl md:text-4xl font-bold">
+                            <div className="text-3xl md:text-4xl font-semibold">
                                 {myPosts.length}
                             </div>
                         </div>
@@ -113,7 +121,7 @@ const Profile = () => {
                             <div className="text-gray-500 text-sm">
                                 Total want to go
                             </div>
-                            <div className="text-3xl md:text-4xl font-bold">
+                            <div className="text-3xl md:text-4xl font-semibold">
                                 {goingList.length}
                             </div>
                         </div>
@@ -176,16 +184,16 @@ const Profile = () => {
                                                 }
                                                 className="cursor-pointer odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
                                             >
-                                                <td className="px-4 py-3 font-bold">
+                                                <td className="px-4 py-3 font-semibold">
                                                     {index + 1}
                                                 </td>
-                                                <td className="px-4 py-3 font-bold">
+                                                <td className="px-4 py-3 font-semibold">
                                                     {post.title}
                                                 </td>
-                                                <td className="px-4 py-3 font-bold hidden md:table-cell">
+                                                <td className="px-4 py-3 font-semibold hidden md:table-cell">
                                                     {post.location}
                                                 </td>
-                                                <td className="px-4 py-3 text-gray-400 hidden lg:table-cell">
+                                                <td className="px-4 py-3 text-gray-500 font-semibold hidden lg:table-cell">
                                                     {
                                                         new Date(post.createdAt)
                                                             .toISOString()
@@ -269,8 +277,8 @@ const Profile = () => {
                         <>
                             {/* Desktop Table */}
                             <div className="hidden md:block overflow-x-auto">
-                                <table className="table-auto bg-white  rounded-xl text-sm w-7/8 mx-auto border-gray-200 shadow-md overflow-x-auto">
-                                    <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
+                                <table className="w-7/8 mx-auto text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
+                                <thead className="text-gray-700 uppercase bg-gray-100">
                                         <tr>
                                             <th className="px-3 py-2 text-center">
                                                 ID
@@ -296,14 +304,14 @@ const Profile = () => {
                                                 onClick={() =>
                                                     navigate(item.url)
                                                 }
-                                                className="cursor-pointer odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
+                                                className="cursor-pointer odd:bg-gray-50 font-semibold even:bg-gray-100 hover:bg-gray-200 transition"
                                             >
                                                 <td className="px-3 py-2 text-center">
                                                     {index + 1}
                                                 </td>
 
                                                 {/* User Column */}
-                                                <td className="px-3 py-2 flex items-center gap-3">
+                                                <td className="px-3 py-2 flex items-center gap-3 font-semibold">
                                                     <img
                                                         src={
                                                             item.author
@@ -318,19 +326,15 @@ const Profile = () => {
                                                         className="h-8 w-8 rounded-full object-cover"
                                                     />
                                                     <div className="flex flex-col">
-                                                        <span className="font-medium truncate">
+                                                        <span className="font-medium truncate font-semibold">
                                                             {item.author
                                                                 ?.displayName ||
                                                                 "Unknown User"}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                {console.log(
-                                                    item.author.firstName,
-                                                    item.author.lastName
-                                                )}
                                                 {/* Title */}
-                                                <td className="px-3 py-2 font-semibold truncate">
+                                                <td className="px-3 py-2 truncate font-semibold">
                                                     {item.title}
                                                 </td>
 
@@ -342,19 +346,15 @@ const Profile = () => {
                                                 {/* Action */}
                                                 <td className="px-3 py-2 text-right">
                                                     <button
-                                                        onClick={() =>
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
                                                             handleRemove(
                                                                 item.id
-                                                            )
-                                                        }
-                                                        disabled={toggleLoading}
-                                                        className={`cursor-pointer bg-red-700 hover:bg-red-800${
-                                                            toggleLoading
-                                                                ? "bg-gray-400 cursor-not-allowed"
-                                                                : "bg-red-600 hover:bg-red-700"
-                                                        } text-white text-xs px-3 py-1 rounded-full`}
+                                                            );
+                                                        }}
+                                                        className="cursor-pointer bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded-full"
                                                     >
-                                                        Remove
+                                                        Delete
                                                     </button>
                                                 </td>
                                             </tr>
@@ -366,12 +366,10 @@ const Profile = () => {
                             {/* Mobile Cards */}
                             <div className="md:hidden rounded-lg bg-white shadow-md w-7/8 mx-auto">
                                 {/* Header for mobile */}
-                                <div className="bg-gray-100 text-gray-700 uppercase text-xs font-semibold px-4 py-2 flex justify-between">
-                                    <span className="w-1/4">ID</span>
-                                    <span className="w-2/4 text-center">
-                                        Title
-                                    </span>
-                                    <span className="w-1/4 text-right">
+                                <div className="bg-gray-100 text-gray-700 uppercase text-xs px-4 py-2 flex justify-between font-semibold">
+                                    <span className="w-1/3">ID</span>
+                                    <span className="w-2/3 ">Title</span>
+                                    <span className="w-1/3 text-right">
                                         Action
                                     </span>
                                 </div>
@@ -380,21 +378,32 @@ const Profile = () => {
                                 {goingList.map((item, index) => (
                                     <div
                                         key={item.id}
-                                        className="flex justify-between items-center p-4 odd:bg-gray-50 even:bg-gray-200"
+                                        className="flex justify-between items-center p-4 odd:bg-gray-50 even:bg-gray-200 font-semibold"
                                         onClick={() => navigate(item.url)}
                                     >
-                                        <div className="w-3/4">
-                                            <p className="text-sm font-bold">
+                                        <div className="w-1/3">
+                                            <p className="text-sm font-semibold">
                                                 {index + 1}
                                             </p>
                                         </div>
-                                        <div className="w-3/4">
+                                        <div className="w-2/3">
                                             <p className="text-sm font-semibold truncate">
                                                 {item.title}
                                             </p>
                                             <p className="text-xs text-gray-600 truncate">
                                                 {item.location}
                                             </p>
+                                        </div>
+                                        <div className="w-1/3 text-right">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleRemove(item.id);
+                                                }}
+                                                className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded-full"
+                                            >
+                                                Remove
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
