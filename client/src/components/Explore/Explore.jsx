@@ -28,7 +28,18 @@ const Explore = () => {
     }
   }
 
-  const handleSearch = (searchTerm) => {
+  // Handle form search with full parameters
+  const handleFormSearch = (searchParams) => {
+    const params = new URLSearchParams()
+    if (searchParams.searchTerm) params.set("q", searchParams.searchTerm)
+    if (searchParams.tags.length) params.set("tags", searchParams.tags.join(","))
+    if (searchParams.location) params.set("location", searchParams.location)
+    
+    exploreData.navigate(`/explore?${params.toString()}`)
+  }
+
+  // Handle simple text search (for AI suggestions)
+  const handleTextSearch = (searchTerm) => {
     if (searchTerm?.trim()) {
       exploreData.navigate(
         `/explore?q=${encodeURIComponent(searchTerm.trim())}`
@@ -48,7 +59,7 @@ const Explore = () => {
 
       <ExploreHeader
         {...exploreData}
-        onSearch={handleSearch}
+        onSearch={handleFormSearch}
       />
 
       {/*       <ActiveFilters
@@ -58,7 +69,7 @@ const Explore = () => {
       <ExploreResults
         {...exploreData}
         onRetry={handleRetry}
-        onSearch={exploreData.searchPosts}
+        onSearch={handleTextSearch}
         onLoadMore={exploreData.handleLoadMore}
       />
     </div>

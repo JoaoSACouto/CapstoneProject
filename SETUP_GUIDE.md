@@ -15,6 +15,7 @@ Before you begin, ensure you have the following installed on your system:
 ### Required Accounts & API Keys
 - **Firebase Project** with Authentication enabled - [Firebase Console](https://console.firebase.google.com/)
 - **Cloudinary Account** for image storage - [Cloudinary](https://cloudinary.com/)
+- **Google Gemini AI API Key** for AI-enhanced search (optional) - [Google AI Studio](https://makersuite.google.com/app/apikey)
 - **Stripe Account** for payment processing (optional) - [Stripe](https://stripe.com/)
 - **Google Maps API Key** for location features (optional) - [Google Cloud Console](https://console.cloud.google.com/)
 
@@ -78,6 +79,9 @@ CLOUDINARY_API_SECRET=your-api-secret
 # Stripe (for payments)
 STRIPE_SECRET_KEY=sk_test_...
 
+# Google Gemini AI (for enhanced search)
+GEMINI_API_KEY=your_gemini_api_key_here
+
 # Client Configuration (for CORS and Stripe redirects)
 CLIENT_URL=https://your-deployed-client-domain.com
 FRONTEND_URL=http://localhost:5173
@@ -114,6 +118,9 @@ VITE_API_URL=http://localhost:3500
 
 # Google Maps API key for location features
 VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+
+# AI Search Configuration
+VITE_ENABLE_AI_SEARCH=true
 
 # Firebase Client Configuration
 VITE_FIREBASE_API_KEY=your-api-key-here
@@ -178,9 +185,22 @@ The application will automatically create the database and collections when you 
 3. Copy your Cloud Name, API Key, and API Secret
 4. Add these values to your server `.env` file
 
+## 🤖 Google Gemini AI Setup (Optional)
+
+### 9. Configure AI-Enhanced Search
+
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key" 
+4. Copy the generated API key
+5. Add `GEMINI_API_KEY=your_api_key_here` to your server `.env` file
+6. Set `VITE_ENABLE_AI_SEARCH=true` in your client `.env` file
+
+**Note**: AI search is optional. If not configured, the application will work normally with regular search functionality only.
+
 ## 🚀 Running the Application
 
-### 9. Start Development Servers
+### 10. Start Development Servers
 
 #### Start the Backend Server
 ```bash
@@ -196,7 +216,7 @@ npm run dev
 ```
 The client will run on http://localhost:5173
 
-### 10. Verify Installation
+### 11. Verify Installation
 
 1. Open your browser to http://localhost:5173
 2. You should see the RestJAM homepage
@@ -235,7 +255,7 @@ npm start
 npm run dev
 ```
 
-### 11. Seed database (rating table)
+### 12. Seed database (rating table)
 ```bash
 cd /server/scripts/
 node seedRatings.js
@@ -267,6 +287,11 @@ npm run test:e2e
 - Verify all Firebase environment variables are set correctly
 - Check Firebase console for authentication method configuration
 - Ensure Firebase project has the correct domain configured
+
+#### AI Search Issues
+- AI search not appearing: Check `VITE_ENABLE_AI_SEARCH=true` in client `.env`
+- AI search errors: Verify `GEMINI_API_KEY` is set correctly in server `.env`
+- No AI suggestions: AI search only activates when regular search returns no results
 
 #### Port Already in Use
 ```bash
