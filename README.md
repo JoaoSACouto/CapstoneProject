@@ -43,6 +43,9 @@ A full-stack social media platform for sharing restaurant experiences and recomm
 
 ### 🔍 Search & Discovery
 - ✅ Advanced full-text search across posts and restaurants
+- ✅ **AI-Enhanced Search** with Google Gemini integration
+- ✅ Intelligent keyword extraction and query understanding
+- ✅ AI-powered search suggestions and recommendations
 - ✅ Tag-based filtering and content categorization
 - ✅ Location-based search capabilities
 - ✅ Voice search integration with Web Speech API
@@ -87,6 +90,7 @@ A full-stack social media platform for sharing restaurant experiences and recomm
 **Backend**: Node.js + Express, Apollo Server, GraphQL  
 **Database**: MongoDB + Mongoose ODM  
 **Authentication**: Firebase Auth  
+**AI Services**: Google Gemini AI for enhanced search  
 **Payments**: Stripe  
 **Storage**: Cloudinary CDN  
 **Testing**: Playwright E2E + Vitest Unit Tests  
@@ -96,6 +100,7 @@ A full-stack social media platform for sharing restaurant experiences and recomm
 ## 🏗️ Architecture & Technical Details
 
 **Database**: MongoDB with 7 models (Users, Posts, Ratings, Likes, WantToGo, Tags, PostsTags)  
+**AI Integration**: Google Gemini AI for natural language query processing and keyword extraction  
 **Security**: Field-level encryption, Firebase token validation, rate limiting  
 **Performance**: CDN image delivery, code splitting, GraphQL caching, bundle optimization  
 
@@ -138,6 +143,36 @@ deletePostFromCache()    // Complete deletion with count updates + GC
 - 🔄 **Smart Invalidation**: Selective cache updates, not full refreshes  
 - 📱 **Offline Support**: Cached data available during network issues
 - 🎯 **Normalized Sharing**: Same data objects shared across multiple queries
+
+### 🤖 AI-Enhanced Search Architecture
+
+RestJAM features an intelligent search system powered by Google Gemini AI that understands natural language queries and provides enhanced search results.
+
+#### **AI Search Flow** (`server/services/aiSearchService.js`)
+1. **Query Analysis**: Google Gemini AI extracts meaningful keywords from natural language
+2. **Keyword Enhancement**: Converts complex queries like "cozy Italian place for date night" → "italian"
+3. **Intelligent Fallback**: Falls back to original query if AI processing fails
+4. **Search Integration**: Enhanced keywords used with existing search infrastructure
+
+#### **Frontend Integration** (`client/src/components/Explore/AISearchSection.jsx`)
+- **Smart Activation**: Only appears when regular search returns no results
+- **Environment-Based**: Controlled by `VITE_ENABLE_AI_SEARCH` environment variable
+- **User Experience**: Encourages exploration with contextual suggestions
+- **Visual Distinction**: AI results displayed with special indigo styling
+
+#### **Key Features**
+- 🧠 **Natural Language Processing**: Understands complex search queries
+- 🎯 **Keyword Extraction**: Identifies the most relevant search terms
+- 💡 **Smart Suggestions**: Provides alternative search terms when no results found
+- ⚡ **Performance Optimized**: Fast response times with efficient caching
+- 🛡️ **Graceful Degradation**: Works seamlessly even when AI services are unavailable
+
+#### **API Configuration**
+```javascript
+// Environment variable controls AI availability
+GEMINI_API_KEY=your_google_gemini_api_key
+VITE_ENABLE_AI_SEARCH=true  // Client-side feature toggle
+```
 
 ## 🚧 Development Setup
 

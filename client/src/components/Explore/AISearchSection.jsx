@@ -19,19 +19,7 @@ const AISearchSection = ({
   const envValue = import.meta.env.VITE_ENABLE_AI_SEARCH
   const isAIEnabled = envValue === 'true'
 
-  // Debug logging
-  /*  console.log('AI Environment Check:', { 
-    envValue, 
-    isAIEnabled, 
-    envType: typeof envValue 
-  }) */
-
-  // Early return if AI is disabled
-  if (!isAIEnabled) {
-    // console.log('AI component hidden - environment variable not enabled')
-    return null
-  }
-  // AI Search functionality
+  // AI Search functionality - must be called before any early returns
   const {
     loading: aiLoading,
     error: aiError,
@@ -45,6 +33,30 @@ const AISearchSection = ({
     hasResults: hasAIResults,
     isEmpty: aiIsEmpty,
   } = useAISearch()
+
+  // Track previous searchTerm to only clear when it actually changes
+  const prevSearchTermRef = React.useRef(searchTerm)
+  
+  // Clear AI results when new regular search happens (searchTerm changes)
+  React.useEffect(() => {
+    if (prevSearchTermRef.current !== searchTerm && aiHasSearched) {
+      clearAIResults()
+    }
+    prevSearchTermRef.current = searchTerm
+  }, [searchTerm, aiHasSearched, clearAIResults])
+
+  // Debug logging
+  /*  console.log('AI Environment Check:', { 
+    envValue, 
+    isAIEnabled, 
+    envType: typeof envValue 
+  }) */
+
+  // Early return if AI is disabled
+  if (!isAIEnabled) {
+    // console.log('AI component hidden - environment variable not enabled')
+    return null
+  }
 
   // Check if we should show AI Assistant button
   const shouldShowAIButton =
@@ -75,13 +87,6 @@ const AISearchSection = ({
       onSearch(suggestion)
     }
   }
-
-  // Clear AI results when new regular search happens
-  React.useEffect(() => {
-    if (hasSearched && !loading && aiHasSearched) {
-      clearAIResults()
-    }
-  }, [searchTerm, hasSearched, loading, aiHasSearched, clearAIResults])
 
   return (
     <>
@@ -140,63 +145,67 @@ const AISearchSection = ({
       )}
 
       {/* AI Results */}
-      {aiHasSearched && hasAIResults && (
+      {aiHasSearched && (
         <div className='mt-8'>
-          <div className='flex items-center justify-center gap-2 mb-6'>
-            <Sparkles className='w-5 h-5 text-indigo-600' />
-            <h3 className='text-lg font-semibold text-gray-800'>
-              AI Enhanced Results ({aiResults.length})
-            </h3>
-          </div>
-          <div className='space-y-6'>
-            {aiResults.map((post) => (
-              <RestaurantCard
-                key={`ai-${post.id}`}
-                id={post.id}
-                image={post.imageUrls?.desktop || post.imageUrls}
-                user={{
-                  name: post.author?.displayName,
-                  avatar:
-                    post.author?.photoURL ||
-                    'https://img.daisyui.com/images/profile/demo/2@94.webp',
-                }}
-                location={post.location}
-                title={post.title}
-                placeName={post.placeName}
-                description={post.content}
-                date={new Date(post.createdAt).toLocaleDateString()}
-                tags={post.tags?.map((tag) => tag.name) || []}
-                rating={post.rating?.type}
-                likeCount={post.likeCount}
-                shareCount={post.shareCount || 0}
-                wantToGoCount={post.attendeeCount}
-                isWantToGo={post.isWantToGo}
-                isLiked={post.isLiked}
-                isOwner={post.isOwner || false}
-                className='max-w-full md:max-w-5/6 lg:max-w-3/4 mx-auto border-l-4 border-indigo-500'
-                url={generateRestaurantUrl(post)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+          {hasAIResults && (
+            <>
+              <div className='flex items-center justify-center gap-2 mb-6'>
+                <Sparkles className='w-5 h-5 text-indigo-600' />
+                <h3 className='text-lg font-semibold text-gray-800'>
+                  AI Enhanced Results ({aiResults.length})
+                </h3>
+              </div>
+              <div className='space-y-6'>
+                {aiResults.map((post) => (
+                  <RestaurantCard
+                    key={`ai-${post.id}`}
+                    id={post.id}
+                    image={post.imageUrls?.desktop || post.imageUrls}
+                    user={{
+                      name: post.author?.displayName,
+                      avatar:
+                        post.author?.photoURL ||
+                        'https://img.daisyui.com/images/profile/demo/2@94.webp',
+                    }}
+                    location={post.location}
+                    title={post.title}
+                    placeName={post.placeName}
+                    description={post.content}
+                    date={new Date(post.createdAt).toLocaleDateString()}
+                    tags={post.tags?.map((tag) => tag.name) || []}
+                    rating={post.rating?.type}
+                    likeCount={post.likeCount}
+                    shareCount={post.shareCount || 0}
+                    wantToGoCount={post.attendeeCount}
+                    isWantToGo={post.isWantToGo}
+                    isLiked={post.isLiked}
+                    isOwner={post.isOwner || false}
+                    className='max-w-full md:max-w-5/6 lg:max-w-3/4 mx-auto border-l-4 border-indigo-500'
+                    url={generateRestaurantUrl(post)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
 
-      {/* AI No Results */}
-      {aiIsEmpty && aiSearchMessage && (
-        <div className='bg-blue-50 rounded-lg p-4 max-w-lg mx-auto'>
-          <p className='text-blue-800 text-sm mb-2'>{aiSearchMessage}</p>
-          {aiSearchSuggestions && aiSearchSuggestions.length > 0 && (
-            <div className='flex flex-wrap gap-2 mt-3'>
-              <span className='text-blue-700 text-xs font-medium'>Try:</span>
-              {aiSearchSuggestions.map((suggestion, index) => (
-                <span
-                  key={index}
-                  className='bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs cursor-pointer hover:bg-blue-200 transition-colors'
-                  onClick={() => handleSuggestionClick(suggestion)}
-                >
-                  {suggestion}
-                </span>
-              ))}
+          {/* AI No Results */}
+          {aiIsEmpty && aiSearchMessage && (
+            <div className='bg-blue-50 rounded-lg p-4 max-w-lg mx-auto'>
+              <p className='text-blue-800 text-sm mb-2'>{aiSearchMessage}</p>
+              {aiSearchSuggestions && aiSearchSuggestions.length > 0 && (
+                <div className='flex flex-wrap gap-2 mt-3'>
+                  <span className='text-blue-700 text-xs font-medium'>Try:</span>
+                  {aiSearchSuggestions.map((suggestion, index) => (
+                    <span
+                      key={index}
+                      className='bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs cursor-pointer hover:bg-blue-200 transition-colors'
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      {suggestion}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -29,11 +29,11 @@ const ExploreResults = ({
     <div className='container mx-auto px-2 py-2 md:py-8'>
       {/* Initial state - no search yet */}
       {!hasActiveSearch && !hasSearched && (
-        <div className='text-center py-10 md:py-20'>
-          <Search className='w-16 h-16 text-gray-300 mx-auto mb-4' />
-          <h2 className='text-xl font-semibold text-gray-600 mb-2'>
+        <div className='text-center py-10 md:py-20' role='main'>
+          <Search className='w-16 h-16 text-gray-300 mx-auto mb-4' aria-hidden='true' />
+          <h1 className='text-xl font-semibold text-gray-600 mb-2'>
             {UI_TEXT.explore.startExploringTitle}
-          </h2>
+          </h1>
           <p className='text-gray-500'>
             {UI_TEXT.explore.startExploringDescription}
           </p>
@@ -66,8 +66,8 @@ const ExploreResults = ({
       {hasSearched && !loading && !error && (
         <>
           {/* Search Summary */}
-          <div className='mb-6'>
-            <h2 className='text-lg font-semibold text-gray-900'>
+          <div className='mb-6' role='region' aria-label='Search results summary'>
+            <h1 className='text-lg font-semibold text-gray-900'>
               {posts.length} {UI_TEXT.explore.placesDiscovered}
               {searchTerm && (
                 <span className='text-gray-600 font-normal'>
@@ -75,7 +75,7 @@ const ExploreResults = ({
                   {UI_TEXT.explore.searchFor} "{searchTerm}"
                 </span>
               )}
-            </h2>
+            </h1>
             {(tags.length > 0 || location) && (
               <div className='mt-2 flex flex-wrap gap-2'>
                 {tags.map((tag) => (
@@ -97,8 +97,8 @@ const ExploreResults = ({
 
           {/* No results found */}
           {posts.length === 0 ? (
-            <div className='text-center py-12'>
-              <Search className='w-16 h-16 text-gray-300 mx-auto mb-4' />
+            <div className='text-center py-12' role='region' aria-label='No results found'>
+              <Search className='w-16 h-16 text-gray-300 mx-auto mb-4' aria-hidden='true' />
               <h2 className='text-xl font-semibold text-gray-600 mb-2'>
                 {UI_TEXT.explore.noResultsTitle}
               </h2>
@@ -122,7 +122,7 @@ const ExploreResults = ({
           ) : (
             <>
               {/* Results list */}
-              <div className='space-y-6'>
+              <div className='space-y-6' role='list' aria-label='Search results'>
                 {posts.map((post) => (
                   <RestaurantCard
                     key={post.id}

@@ -63,6 +63,8 @@ const ExploreHeader = ({
                           ? 'bg-info text-black'
                           : 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
                       )}
+                      aria-pressed={isSelected}
+                      aria-label={`${isSelected ? 'Remove' : 'Add'} ${tag.name} tag filter`}
                     >
                       #{tag.name}
                     </button>
@@ -76,6 +78,8 @@ const ExploreHeader = ({
               <button
                 onClick={() => setShowAllTags(!showAllTags)}
                 className='text-purple-600 text-sm font-medium underline hover:text-purple-800 transition-colors'
+                aria-expanded={showAllTags}
+                aria-label={showAllTags ? 'Show fewer tags' : 'Show more tags'}
               >
                 {showAllTags
                   ? UI_TEXT.explore.lessButton
