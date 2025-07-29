@@ -8,8 +8,10 @@ import { useNavbar } from "../hooks/useNavbar";
 import ErrorMessage from "./ErrorMessage";
 import { useNavigate } from "react-router-dom";
 import { useDeletePost } from "../hooks/useDeletePost";
+import { useWantToGoPost } from "../hooks/postActions/useWantToGoPost";
 
 const Profile = () => {
+    const { wantToGoPost, loading: toggleLoading } = useWantToGoPost();
     const { handleSignOut } = useNavbar();
     const user = useSelector((state) => state.user.data);
     const authInitialized = useSelector((state) => state.user.authInitialized);
@@ -34,6 +36,15 @@ const Profile = () => {
 
     const handlePostCreated = () => {
         navigate("/create", { state: { from: "profile" } });
+    };
+
+    const handleRemove = async (postId) => {
+        try {
+            await wantToGoPost({ variables: { postId } });
+            await refetchMyPosts({ fetchPolicy: "network-only" }); 
+        } catch (error) {
+            console.error("Failed to remove from want-to-go list:", error);
+        }
     };
 
     const handleDelete = async (postId) => {
@@ -282,7 +293,10 @@ const Profile = () => {
                                         {goingList.map((item, index) => (
                                             <tr
                                                 key={item.id}
-                                                className="odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
+                                                onClick={() =>
+                                                    navigate(item.url)
+                                                }
+                                                className="cursor-pointer odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
                                             >
                                                 <td className="px-3 py-2 text-center">
                                                     {index + 1}
@@ -305,11 +319,16 @@ const Profile = () => {
                                                     />
                                                     <div className="flex flex-col">
                                                         <span className="font-medium truncate">
-                                                            {item.author?.displayName || "Unknown User"}
+                                                            {item.author
+                                                                ?.displayName ||
+                                                                "Unknown User"}
                                                         </span>
                                                     </div>
                                                 </td>
-                                                        {console.log(item.author.firstName, item.author.lastName)}
+                                                {console.log(
+                                                    item.author.firstName,
+                                                    item.author.lastName
+                                                )}
                                                 {/* Title */}
                                                 <td className="px-3 py-2 font-semibold truncate">
                                                     {item.title}
@@ -324,11 +343,18 @@ const Profile = () => {
                                                 <td className="px-3 py-2 text-right">
                                                     <button
                                                         onClick={() =>
-                                                            navigate(item.url)
+                                                            handleRemove(
+                                                                item.id
+                                                            )
                                                         }
-                                                        className="bg-purple-700 hover:bg-purple-800 text-white text-xs px-3 py-1 rounded-full"
+                                                        disabled={toggleLoading}
+                                                        className={`cursor-pointer bg-red-700 hover:bg-red-800${
+                                                            toggleLoading
+                                                                ? "bg-gray-400 cursor-not-allowed"
+                                                                : "bg-red-600 hover:bg-red-700"
+                                                        } text-white text-xs px-3 py-1 rounded-full`}
                                                     >
-                                                        Detail
+                                                        Remove
                                                     </button>
                                                 </td>
                                             </tr>
@@ -370,9 +396,6 @@ const Profile = () => {
                                                 {item.location}
                                             </p>
                                         </div>
-                                        <button className="bg-purple-700 hover:bg-purple-800 text-white text-xs px-4 py-1 rounded-full">
-                                            Detail
-                                        </button>
                                     </div>
                                 ))}
                             </div>
