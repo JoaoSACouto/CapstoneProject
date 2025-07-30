@@ -63,18 +63,20 @@ export const useConfirmDialog = () => {
       cancelText: UI_TEXT.dialogs.deletePostFromProfile.cancelText,
     },
   }
-
-  // Helper methods for common actions
-  const confirmDelete = (message) =>
+  
+  const confirmDelete = (message, customOptions = {}) =>
     confirm({
       ...presets.deletePost,
       message,
+      ...customOptions,
       successMessage: 'Post deleted successfully!',
     })
-  const confirmDeleteFromProfile = (message) =>
+
+  const confirmDeleteFromProfile = (message, customOptions = {}) =>
     confirm({
       ...presets.deletePostFromProfile,
       message,
+      ...customOptions,
       successMessage: 'Post deleted successfully!',
     })
 

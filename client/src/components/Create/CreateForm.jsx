@@ -51,6 +51,7 @@ const CreateForm = ({ onSubmit, isLoading, serverError }) => {
         placeName: '',
         location: '',
         tags: '',
+        image: null,
       }}
       validationSchema={createValidationSchema}
       onSubmit={handleSubmit}
