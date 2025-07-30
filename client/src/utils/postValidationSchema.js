@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 
 export const createValidationSchema = Yup.object({
   title: Yup.string()
@@ -16,20 +16,18 @@ export const createValidationSchema = Yup.object({
   location: Yup.string()
     .required('Location is required'),
 
-  tags: Yup.string()
-    .notRequired(),
+  tags: Yup.string().notRequired(),
 
   image: Yup.mixed()
-    .required('Image is required')
     .test(
-      'fileSize',
-      'Image size must be less than 5MB',
-      (value) => !value || (value && value.size <= 5 * 1024 * 1024)
-    )
-    .test(
-      'fileType',
-      'Unsupported file format',
-      (value) =>
-        !value || (value && ['image/jpeg', 'image/png', 'image/webp'].includes(value.type))
+      'fileRequiredOnEdit',
+      'Image is required when uploading a new one.',
+      function (value) {
+        // Only validate if value is a File (i.e. user uploaded a new one)
+        if (value instanceof File) {
+          return value && value.size > 0;
+        }
+        return true; // Skip validation for existing image URL (string)
+      }
     ),
-})
+});
