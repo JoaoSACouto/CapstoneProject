@@ -55,7 +55,7 @@ const corsOptions = {
     'http://localhost:3000', // Alternative dev port
     'http://127.0.0.1:5173', // Alternative localhost
     'https://localhost:4173',
-    process.env.CLIENT_URL || 'https://your-deployed-client-domain.com',
+    process.env.CLIENT_URL || 'https://capstone-project-amber-one.vercel.app',
     'https://studio.apollographql.com',
   ],
   credentials: true,
