@@ -1,20 +1,19 @@
 import React from 'react'
 import EditForm from './EditForm'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { showSuccessToast } from '../../utils/toast'
 
 const Edit = () => {
-  const { id: postId } = useParams()  
-  const navigate = useNavigate()
+  const { id: postId } = useParams()
 
   const handleSuccess = () => {
-    // // Simple approach: go to home and refresh
-    // window.location.href = '/'
-     // Redirect to home with success message
-      navigate('/', {
-        state: {
-          successMessage: 'Post updated successfully!',
-        },
-      })
+    // Show toast message
+    showSuccessToast('Post updated successfully!')
+
+    // Force refresh to update cache
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 1000)
   }
 
   return (
