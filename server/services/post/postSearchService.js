@@ -3,6 +3,10 @@ const PostsTags = require('../../models/PostsTags')
 const Tag = require('../../models/Tags')
 const { buildPostAggregationPipeline } = require('../../utils/aggregationPipelines')
 
+const escapeRegex = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 /**
  * Post Search Service - Search and filtering operations
  * Handles tag-based search and text-based search functionality
@@ -16,7 +20,11 @@ const searchPostsByTags = async (tags, limit = 10, offset = 0, currentUserId = n
 
   // Find tags that match the search terms (case insensitive)
   const matchingTags = await Tag.find({
-    name: { $in: tags.map((tag) => new RegExp(tag.trim(), 'i')) },
+    name: { $in: tags.map((tag) => {
+      const trimmed = tag.trim()
+      if (trimmed.length > 100) return null
+      return new RegExp(escapeRegex(trimmed), 'i')
+    }).filter(Boolean) },
   })
 
   if (matchingTags.length === 0) return []
@@ -47,13 +55,18 @@ const searchPostsByTags = async (tags, limit = 10, offset = 0, currentUserId = n
 const basicSearch = async (searchTerm, limit = 10, offset = 0, currentUserId = null) => {
   if (!searchTerm || !searchTerm.trim()) return []
 
+  const trimmed = searchTerm.trim()
+  if (trimmed.length > 500) return []
+
+  const escapedTerm = escapeRegex(trimmed)
+  
   // Create text search filter
   const searchFilter = {
     $or: [
-      { title: { $regex: searchTerm.trim(), $options: 'i' } },
-      { content: { $regex: searchTerm.trim(), $options: 'i' } },
-      { placeName: { $regex: searchTerm.trim(), $options: 'i' } },
-      { location: { $regex: searchTerm.trim(), $options: 'i' } },
+      { title: { $regex: escapedTerm, $options: 'i' } },
+      { content: { $regex: escapedTerm, $options: 'i' } },
+      { placeName: { $regex: escapedTerm, $options: 'i' } },
+      { location: { $regex: escapedTerm, $options: 'i' } },
     ],
   }
 
