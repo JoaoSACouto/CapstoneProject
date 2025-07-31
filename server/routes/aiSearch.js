@@ -49,6 +49,13 @@ router.post('/ai-search', optionalAuth, async (req, res) => {
       });
     }
 
+    if (query.trim().length > 500) {
+      return res.status(400).json({
+        error: 'Query too long. Maximum 500 characters allowed.',
+        success: false
+      });
+    }
+
     // Check if AI service is available
     if (!isAIAvailable()) {
       return res.status(503).json({

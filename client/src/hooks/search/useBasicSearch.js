@@ -1,6 +1,7 @@
 import { useLazyQuery } from '@apollo/client'
 import { useState } from 'react'
 import { BASIC_SEARCH } from '../../utils/graphql/post'
+import { showErrorToast } from '../../utils/toast'
 
 export const useBasicSearch = () => {
   const [searchResults, setSearchResults] = useState(null)
@@ -12,6 +13,7 @@ export const useBasicSearch = () => {
     fetchPolicy: 'cache-and-network',
     onError: (error) => {
       console.error('BASIC_SEARCH error:', error)
+      showErrorToast(`Search failed: ${error.message}`, 4000)
     },
     onCompleted: (data) => {
       setSearchResults(data)
@@ -23,6 +25,11 @@ export const useBasicSearch = () => {
 
     if (!searchTerm?.trim()) {
       setSearchResults(null)
+      return
+    }
+
+    if (searchTerm.trim().length > 500) {
+      showErrorToast('Search query too long. Maximum 500 characters allowed.', 4000)
       return
     }
 

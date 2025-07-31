@@ -81,7 +81,7 @@ export const ImageUploadField = () => {
     <div className="mb-4">
       <label htmlFor="image" className={FIELD_STYLES.label}>
         {UI_TEXT.labels.image}
-        {/* <RequiredIndicator /> */}
+        <RequiredIndicator />
       </label>
       <div className="mt-2">
         <input

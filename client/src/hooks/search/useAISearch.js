@@ -23,6 +23,13 @@ export const useAISearch = () => {
     // Validate input
     if (!query || query.trim().length === 0) {
       setError('Query is required')
+      showErrorToast('Query is required', 3000)
+      return
+    }
+
+    if (query.trim().length > 500) {
+      setError('Query too long. Maximum 500 characters allowed.')
+      showErrorToast('Query too long. Maximum 500 characters allowed.', 4000)
       return
     }
 
@@ -30,6 +37,7 @@ export const useAISearch = () => {
     const wordCount = query.trim().split(/\s+/).length
     if (wordCount < 2) {
       setError('Query too short for AI enhancement')
+      showErrorToast('Query too short for AI enhancement', 3000)
       return
     }
 
@@ -64,6 +72,10 @@ export const useAISearch = () => {
         if (response.status === 503 && data.aiDisabled) {
           setIsBackendAvailable(false)
           throw new Error('AI search is currently disabled on the server')
+        }
+        // Handle validation errors with user-friendly messages
+        if (response.status === 400) {
+          throw new Error(data.error || 'Invalid search query')
         }
         throw new Error(data.error || `HTTP ${response.status}`)
       }
