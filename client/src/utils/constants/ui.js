@@ -6,7 +6,7 @@ export const UI_TEXT = {
         processing: "Processing...",
         forgotPassword: "Forgot password?",
         newToApp: "New to RestJAM? 👉Sign Up👈 Now",
-        alreadyRegistered: "Already have an account? 👉 Log in now!",
+        alreadyRegistered: "Already have an account? 👉 Log in 👈 now!",
         loginSignup: "Login/Signup",
     },
     error: {
