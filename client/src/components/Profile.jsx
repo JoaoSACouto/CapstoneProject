@@ -256,7 +256,7 @@ const Profile = () => {
                                                         onClick={
                                                             handlePostCreated
                                                         }
-                                                        className="bg-purple-700 hover:bg-purple-800 text-white text-sm px-4 py-2 rounded-xl"
+                                                        className="cursor-pointer bg-primary text-white text-sm px-4 py-2 rounded-xl"
                                                     >
                                                         Share Your Experience
                                                     </button>
