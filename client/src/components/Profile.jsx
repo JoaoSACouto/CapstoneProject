@@ -76,7 +76,7 @@ const Profile = () => {
         if (!confirmed) return;
 
         try {
-            await deletePost({ variables: { id: postId } });
+            await deletePost(postId);
             await refetchMyPosts({ fetchPolicy: "network-only" });
         } catch (error) {
             console.error("Delete failed:", error);
