@@ -53,31 +53,37 @@ const searchPostsByTags = async (tags, limit = 10, offset = 0, currentUserId = n
  * Basic text search across post content with pagination
  */
 const basicSearch = async (searchTerm, limit = 10, offset = 0, currentUserId = null) => {
-  if (!searchTerm || !searchTerm.trim()) return []
+  try {
+    if (!searchTerm || !searchTerm.trim()) return []
 
-  const trimmed = searchTerm.trim()
-  if (trimmed.length > 500) return []
+    const trimmed = searchTerm.trim()
+    if (trimmed.length > 500) return []
 
-  const escapedTerm = escapeRegex(trimmed)
-  
-  // Create text search filter
-  const searchFilter = {
-    $or: [
-      { title: { $regex: escapedTerm, $options: 'i' } },
-      { content: { $regex: escapedTerm, $options: 'i' } },
-      { placeName: { $regex: escapedTerm, $options: 'i' } },
-      { location: { $regex: escapedTerm, $options: 'i' } },
-    ],
+    const escapedTerm = escapeRegex(trimmed)
+    
+    // Create text search filter
+    const searchFilter = {
+      $or: [
+        { title: { $regex: escapedTerm, $options: 'i' } },
+        { content: { $regex: escapedTerm, $options: 'i' } },
+        { placeName: { $regex: escapedTerm, $options: 'i' } },
+        { location: { $regex: escapedTerm, $options: 'i' } },
+      ],
+    }
+
+    // Use aggregation pipeline with search filter
+    const pipeline = buildPostAggregationPipeline(
+      searchFilter,
+      currentUserId,
+      { limit, offset }
+    )
+
+    const results = await Post.aggregate(pipeline)
+    return results || []
+  } catch (error) {
+    console.error('Basic search error:', error)
+    throw error
   }
-
-  // Use aggregation pipeline with search filter
-  const pipeline = buildPostAggregationPipeline(
-    searchFilter,
-    currentUserId,
-    { limit, offset }
-  )
-
-  return await Post.aggregate(pipeline)
 }
 
 module.exports = {

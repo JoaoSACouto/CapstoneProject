@@ -68,7 +68,18 @@ Keyword:`;
 
     try {
       const result = await this.model.generateContent(prompt);
+      
+      // Check if response exists
+      if (!result || !result.response) {
+        throw new Error('No response from Gemini AI');
+      }
+      
       const response = result.response.text().trim();
+      
+      // Validate response
+      if (!response) {
+        throw new Error('Empty response from Gemini AI');
+      }
       
       // Clean up the response - extract single word
       const keyword = response
@@ -77,6 +88,12 @@ Keyword:`;
         .replace(/[^\w]/g, '') // Remove non-word characters
         .toLowerCase()
         .trim();
+
+      // Fallback if keyword is empty
+      if (!keyword) {
+        console.warn('AI returned empty keyword, falling back to original query');
+        return originalQuery.toLowerCase().trim();
+      }
 
       console.log(`AI Keyword extracted: "${originalQuery}" → "${keyword}"`);
       return keyword;

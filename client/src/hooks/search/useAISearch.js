@@ -65,7 +65,29 @@ export const useAISearch = () => {
         }),
       })
 
-      const data = await response.json()
+      // Clone response to read text if JSON parsing fails
+      const responseClone = response.clone()
+      
+      let data
+      try {
+        data = await response.json()
+      } catch (jsonError) {
+        console.error('JSON parsing failed:', jsonError)
+        try {
+          const text = await responseClone.text()
+          console.error('Response text:', text.substring(0, 500))
+          
+          // Check if it's HTML error page
+          if (text.includes('<html>') || text.includes('<!DOCTYPE')) {
+            throw new Error('Server returned HTML error page instead of JSON')
+          }
+          
+          throw new Error('Invalid JSON response from server')
+        } catch (textError) {
+          console.error('Could not read response text:', textError)
+          throw new Error('Server response could not be parsed')
+        }
+      }
 
       if (!response.ok) {
         // Handle specific AI disabled case
@@ -142,6 +164,7 @@ export const useAISearch = () => {
       return false
     }
   }
+
 
   return {
     // State
