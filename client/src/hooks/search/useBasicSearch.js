@@ -2,6 +2,7 @@ import { useLazyQuery } from '@apollo/client'
 import { useState } from 'react'
 import { BASIC_SEARCH } from '../../utils/graphql/post'
 import { showErrorToast } from '../../utils/toast'
+import { POST_QUERY_CONFIG } from '../../utils/constants/posts'
 
 export const useBasicSearch = () => {
   const [searchResults, setSearchResults] = useState(null)
@@ -21,7 +22,7 @@ export const useBasicSearch = () => {
   })
 
   const searchPosts = (searchTerm, options = {}) => {
-    const { limit = 10, offset = 0 } = options
+    const { limit = POST_QUERY_CONFIG.DEFAULT_LIMIT, offset = 0 } = options
 
     if (!searchTerm?.trim()) {
       setSearchResults(null)
@@ -46,7 +47,7 @@ export const useBasicSearch = () => {
     if (!data?.basicSearch) return
 
     const currentLength = data.basicSearch.length
-    const { limit = 20 } = currentOptions
+    const { limit = POST_QUERY_CONFIG.DEFAULT_LIMIT } = currentOptions
 
     return fetchMore({
       variables: {
@@ -69,7 +70,7 @@ export const useBasicSearch = () => {
 
   const posts = searchResults?.basicSearch || []
   const isLoadingMore = networkStatus === 3
-  const hasMoreResults = posts.length > 0 && posts.length % 20 === 0
+  const hasMoreResults = posts.length > 0 && posts.length % POST_QUERY_CONFIG.DEFAULT_LIMIT === 0
 
   return {
     searchPosts,

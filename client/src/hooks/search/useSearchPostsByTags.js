@@ -1,6 +1,7 @@
 import { useLazyQuery } from '@apollo/client'
 import { useState } from 'react'
 import { SEARCH_POSTS_BY_TAGS } from '../../utils/graphql/post'
+import { POST_QUERY_CONFIG } from '../../utils/constants/posts'
 
 export const useSearchPostsByTags = () => {
   const [searchResults, setSearchResults] = useState(null)
@@ -19,7 +20,7 @@ export const useSearchPostsByTags = () => {
   })
 
   const searchByTags = (tags, options = {}) => {
-    const { limit = 10, offset = 0 } = options
+    const { limit = POST_QUERY_CONFIG.DEFAULT_LIMIT, offset = 0 } = options
 
     if (!tags || tags.length === 0) {
       setSearchResults(null)
@@ -39,7 +40,7 @@ export const useSearchPostsByTags = () => {
     if (!data?.searchPostsByTags) return
 
     const currentLength = data.searchPostsByTags.length
-    const { limit = 20 } = currentOptions
+    const { limit = POST_QUERY_CONFIG.DEFAULT_LIMIT } = currentOptions
 
     return fetchMore({
       variables: {
@@ -62,7 +63,7 @@ export const useSearchPostsByTags = () => {
 
   const posts = searchResults?.searchPostsByTags || []
   const isLoadingMore = networkStatus === 3
-  const hasMoreResults = posts.length > 0 && posts.length % 20 === 0
+  const hasMoreResults = posts.length > 0 && posts.length % POST_QUERY_CONFIG.DEFAULT_LIMIT === 0
 
   return {
     searchByTags,
