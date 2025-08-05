@@ -31,7 +31,7 @@ export const useAuth = () => {
     setIsLoading(true)
     setErrorMessage(null)
 
-    const { email, password, firstName, lastName, phone, userName } = formData
+    const { email, password, firstName, lastName, phone, userName, selectedAvatar } = formData
     try {
       // 1. Create Firebase auth account
       const userCredential = await createUserWithEmailAndPassword(
@@ -41,10 +41,11 @@ export const useAuth = () => {
       )
       const user = userCredential.user
 
-      // 2. Update user profile with display name and random avatar, otherwise the avatar will not be shown correctly
+      // 2. Update user profile with display name and selected avatar, otherwise the avatar will not be shown correctly
+      const avatarUrl = selectedAvatar || `${AUTH_CONFIG.avatarBaseUrl}${Math.floor(Math.random() * AUTH_CONFIG.maxAvatarNumber) + 1}`
       await updateProfile(user, {
         displayName: userName,
-        photoURL: `${AUTH_CONFIG.avatarBaseUrl}${Math.floor(Math.random() * AUTH_CONFIG.maxAvatarNumber) + 1}`,
+        photoURL: avatarUrl,
       })
 
       // 3. Force refresh the current user to get updated profile

@@ -2,6 +2,7 @@ import { Field, ErrorMessage } from "formik";
 import { UI_TEXT } from "../../utils/constants/ui";
 import { FORM_PLACEHOLDERS } from "../../utils/constants/form";
 import { FieldWithMic, SpeechButton } from "../Speech";
+import AvatarSelector from "./AvatarSelector";
 
 // Common styles
 const FIELD_STYLES = {
@@ -60,11 +61,17 @@ const FormField = ({
     </div>
 );
 
-export const SignUpFields = ({ setFieldValue }) => (
+export const SignUpFields = ({ setFieldValue, values = {} }) => (
     <div role="group" aria-labelledby="personal-info-legend">
         <h3 id="personal-info-legend" className="sr-only">
             Personal Information
         </h3>
+
+        <AvatarSelector
+            selectedAvatar={values.selectedAvatar}
+            onAvatarSelect={(avatarUrl) => setFieldValue('selectedAvatar', avatarUrl)}
+            className="mb-6"
+        />
 
         <FieldWithMic
             name="userName"

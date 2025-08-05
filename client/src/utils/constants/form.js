@@ -35,6 +35,7 @@ export const FORM_CONFIG = {
       password: '',
       confirmPassword: '',
       phone: '',
+      selectedAvatar: '',
     },
     signIn: {
       email: '',
