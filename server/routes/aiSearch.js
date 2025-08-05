@@ -128,11 +128,18 @@ router.post('/ai-search', optionalAuth, async (req, res) => {
   } catch (error) {
     console.error('AI Search error:', error);
     
-    res.status(500).json({
-      error: 'AI search failed. Please try again or use regular search.',
-      success: false,
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    // Ensure we always return valid JSON
+    try {
+      res.status(500).json({
+        error: 'AI search failed. Please try again or use regular search.',
+        success: false,
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
+    } catch (jsonError) {
+      // Fallback if JSON response fails
+      console.error('Failed to send JSON error response:', jsonError);
+      res.status(500).send('Internal server error');
+    }
   }
 });
 
@@ -174,18 +181,28 @@ router.get('/ai-search/test', async (req, res) => {
  * Get AI service status
  */
 router.get('/ai-search/status', (req, res) => {
-  const available = isAIAvailable();
-  res.json({
-    available,
-    service: 'Google Gemini AI',
-    features: available ? [
-      'Natural language query enhancement',
-      'Keyword extraction',
-      'Fallback to regular search'
-    ] : [],
-    message: available ? 'AI search is ready' : 'AI search is disabled - API key not configured',
-    timestamp: new Date().toISOString()
-  });
+  try {
+    const available = isAIAvailable();
+    res.json({
+      available,
+      service: 'Google Gemini AI',
+      features: available ? [
+        'Natural language query enhancement',
+        'Keyword extraction',
+        'Fallback to regular search'
+      ] : [],
+      message: available ? 'AI search is ready' : 'AI search is disabled - API key not configured',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Status endpoint error:', error);
+    res.status(500).json({
+      error: 'Failed to get status',
+      available: false,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
+
 
 module.exports = router;
