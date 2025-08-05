@@ -24,13 +24,14 @@ const AttendeesList = ({ attendees }) => {
               key={index}
               className='avatar'
             >
-              <div className='w-12'>
+              <div className='w-12 rounded-full overflow-hidden bg-gray-100'>
                 <img
                   src={
                     attendee.photoURL ||
                     'https://img.daisyui.com/images/profile/demo/3@94.webp'
                   }
                   alt={attendee.displayName || `User ${index + 1}`}
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
@@ -54,13 +55,14 @@ const AttendeesList = ({ attendees }) => {
                 className='flex flex-col items-center text-center '
               >
                 <div className='avatar'>
-                  <div className='w-12 rounded-full'>
+                  <div className='w-12 rounded-full overflow-hidden bg-gray-100'>
                     <img
                       src={
                         attendee.photoURL ||
                         'https://img.daisyui.com/images/profile/demo/3@94.webp'
                       }
                       alt={attendee.displayName || `User ${index + 1}`}
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>

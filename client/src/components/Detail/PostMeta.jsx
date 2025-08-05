@@ -5,10 +5,11 @@ const PostMeta = ({ author, rating, layout = "detail" }) => {
     return (
       <div className="mb-3 flex justify-evenly align-center gap-3 sm:gap-6 flex-wrap md:flex-nowrap w-full">
         <div className="order-2 md:order-1 avatar w-fit flex-col items-center my-auto">
-          <div className="w-12 md:w-16 rounded-full">
+          <div className="w-12 md:w-16 rounded-full overflow-hidden bg-gray-100">
             <img
               src={author.photoURL || author.avatar}
               alt={author.displayName || author.name}
+              className="w-full h-full object-cover"
             />
           </div>
           <p className="text-sm text-base-content text-black font-medium">
@@ -25,10 +26,11 @@ const PostMeta = ({ author, rating, layout = "detail" }) => {
   return (
     <div className="mb-3 px-2 lg:px-20 flex justify-center sm:justify-evenly md:justify-start align-center gap-6">
       <div className="order-2 md:order-1 avatar w-fit flex-col items-center my-auto">
-        <div className="w-12 sm:w-13 md:w-14 rounded-full">
+        <div className="w-12 sm:w-13 md:w-14 rounded-full overflow-hidden bg-gray-100">
           <img
             src={author.photoURL}
             alt={author.displayName}
+            className="w-full h-full object-cover"
           />
         </div>
         <p className="text-sm text-base-content text-black font-medium">

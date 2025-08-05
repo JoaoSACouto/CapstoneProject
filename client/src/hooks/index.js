@@ -18,6 +18,7 @@ export { useVoiceInput } from './useVoiceInput'
 
 // User hooks
 export { useUserProfile, useSyncUser, useUpdateUserProfile } from './useUser'
+export { useUpdateProfilePic } from './useUpdateProfilePic'
 
 // Backward compatibility - re-export old usePost exports
 export { usePost, useTags } from './usePost'
