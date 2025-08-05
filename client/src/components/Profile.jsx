@@ -1,5 +1,6 @@
 // Import necessary libraries and components
 import { useSelector } from "react-redux";
+import { useState } from "react";
 import { useMyPosts } from "../hooks/useMyPosts";
 import { useMyWantToGoPosts } from "../hooks/useMyWantToGoPosts";
 import Hero from "./Hero";
@@ -12,6 +13,8 @@ import { useWantToGoPost } from "../hooks/postActions/useWantToGoPost";
 import { Edit, Trash, Loader2 } from "lucide-react";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { useConfirmDialog } from "../hooks/useConfirmDialog";
+import ProfileAvatar from "./ProfileAvatar";
+import ProfilePicModal from "./ProfilePicModal";
 
 const Profile = () => {
     const { wantToGoPost, loading: toggleLoading } = useWantToGoPost();
@@ -19,6 +22,9 @@ const Profile = () => {
     const user = useSelector((state) => state.user.data);
     const authInitialized = useSelector((state) => state.user.authInitialized);
     const { confirmDelete, dialogProps } = useConfirmDialog();
+    
+    // Profile picture modal state
+    const [isProfilePicModalOpen, setIsProfilePicModalOpen] = useState(false);
 
     // My posts
     const {
@@ -41,6 +47,19 @@ const Profile = () => {
 
     const handlePostCreated = () => {
         navigate("/create", { state: { from: "profile" } });
+    };
+
+    const handleAvatarClick = () => {
+        setIsProfilePicModalOpen(true);
+    };
+
+    const handleProfilePicModalClose = () => {
+        setIsProfilePicModalOpen(false);
+    };
+
+    const handleProfilePicUpdate = (newPhotoURL) => {
+        // The profile picture will be automatically updated in the UI
+        // through the Redux store when Firebase Auth updates
     };
 
     const handleRemove = async (postId) => {
@@ -90,6 +109,11 @@ const Profile = () => {
     return (
         <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8">
             <ConfirmDialog {...dialogProps} loading={toggleLoading} />
+            <ProfilePicModal 
+                isOpen={isProfilePicModalOpen}
+                onClose={handleProfilePicModalClose}
+                onUpdate={handleProfilePicUpdate}
+            />
             <main className="flex-1">
                 {/* Hero Section */}
                 <Hero
@@ -119,13 +143,9 @@ const Profile = () => {
 
                         {/* Avatar */}
                         <div>
-                            <img
-                                src={
-                                    user?.photoURL ||
-                                    "https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                }
-                                alt="Profile"
-                                className="h-20 w-20 rounded-full object-cover border-4 border-white shadow-md"
+                            <ProfileAvatar 
+                                onClick={handleAvatarClick}
+                                className="h-24 w-24 md:h-32 md:w-32"
                             />
                         </div>
 
@@ -139,6 +159,8 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
+
+
 
                     {/* Links */}
                     <div className="mt-6 flex flex-col items-center space-y-2">
