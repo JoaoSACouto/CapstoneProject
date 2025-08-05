@@ -27,9 +27,9 @@ const LoginForm = ({ isSignInForm, onSubmit, isLoading }) => {
       validationSchema={getValidationSchema(isSignInForm)}
       onSubmit={handleSubmit}
     >
-      {({ setFieldValue }) => (
+      {({ setFieldValue, values }) => (
         <Form className='space-y-6'>
-          {!isSignInForm && <SignUpFields setFieldValue={setFieldValue} />}
+          {!isSignInForm && <SignUpFields setFieldValue={setFieldValue} values={values} />}
 
           <FieldWithMic
             name='email'
