@@ -33,11 +33,23 @@ const optionalAuth = async (req, res, next) => {
  * Handles AI-enhanced search requests
  */
 
+// Handle preflight OPTIONS requests
+router.options('/ai-search', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200);
+});
+
 /**
  * POST /api/ai-search
  * Enhance search query using AI and return results
  */
 router.post('/ai-search', optionalAuth, async (req, res) => {
+  // Ensure proper CORS headers for Vercel
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   try {
     const { query, limit = 10, offset = 0 } = req.body;
 
