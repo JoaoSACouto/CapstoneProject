@@ -67,10 +67,11 @@ const RestaurantCard = ({
         {/* Author Info & Rating */}
         <div className=' mb-3 flex justify-evenly align-center w-full gap-3 sm:gap-6 flex-wrap md:flex-nowrap'>
           <div className='order-2 md:order-1 avatar w-fit flex-col items-center my-auto'>
-            <div className='w-12 md:w-16 rounded-full'>
+            <div className='w-12 md:w-16 rounded-full overflow-hidden bg-gray-100'>
               <img
                 src={user.avatar}
                 alt={user.name}
+                className="w-full h-full object-cover"
               />
             </div>
             <p className='text-sm text-base-content text-black font-medium'>

@@ -51,6 +51,12 @@ export const usePostActions = ({
   })
 
   const handleWantToGoToggle = requireAuth(async () => {
+    // Prevent users from adding their own posts to want-to-go list
+    if (isOwner) {
+      showErrorToast("You can't add your own post to Want to Go")
+      return
+    }
+
     try {
       await wantToGoPost({ variables: { postId } })
       // Show appropriate toast based on previous state (action toggles it)

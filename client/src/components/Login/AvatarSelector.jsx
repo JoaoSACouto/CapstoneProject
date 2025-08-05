@@ -109,11 +109,13 @@ const AvatarSelector = ({ selectedAvatar, onAvatarSelect, className = '' }) => {
       {/* Selected avatar preview */}
       {selectedAvatar && (
         <div className="mt-4 flex items-center space-x-3">
-          <img
-            src={selectedAvatar}
-            alt="Selected avatar preview"
-            className="w-16 h-16 rounded-full border-2 border-indigo-600"
-          />
+          <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 border-2 border-indigo-600">
+            <img
+              src={selectedAvatar}
+              alt="Selected avatar preview"
+              className="w-full h-full object-cover"
+            />
+          </div>
           <div className="text-sm text-gray-600">
             <p className="font-medium">Selected Avatar</p>
             <p className="text-xs">This will be your profile picture</p>

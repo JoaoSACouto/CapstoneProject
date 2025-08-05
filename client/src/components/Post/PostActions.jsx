@@ -97,13 +97,26 @@ const PostActions = ({
           {/* Want to go button */}
           <button
             onClick={handleWantToGoToggle}
+            disabled={isOwner}
             className={`btn btn-md md:btn-lg rounded-full text-lg-bold text-sm md:text-base lg:text-lg whitespace-nowrap gap-2 ${
-              isLoggedIn && isWantToGo
+              isOwner
+                ? 'btn-disabled opacity-50 cursor-not-allowed'
+                : isLoggedIn && isWantToGo
                 ? 'btn-warning text-white hover:bg-warning-focus'
                 : 'btn-primary text-white hover:bg-primary-focus'
             }`}
+            title={isOwner ? "You can't add your own post to Want to Go" : undefined}
           >
             {(() => {
+              if (isOwner) {
+                return (
+                  <>
+                    <CircleArrowRight className='w-6 h-6' />
+                    Your Post
+                  </>
+                )
+              }
+
               const showYouAreGoing = isLoggedIn && isWantToGo
 
               return showYouAreGoing ? (
