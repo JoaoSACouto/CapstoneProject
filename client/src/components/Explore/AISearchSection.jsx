@@ -36,7 +36,7 @@ const AISearchSection = ({
 
   // Track previous searchTerm to only clear when it actually changes
   const prevSearchTermRef = React.useRef(searchTerm)
-  
+
   // Clear AI results when new regular search happens (searchTerm changes)
   React.useEffect(() => {
     if (prevSearchTermRef.current !== searchTerm && aiHasSearched) {
@@ -74,10 +74,9 @@ const AISearchSection = ({
     if (!searchTerm || aiLoading) return
 
     try {
-      console.log(`Starting AI search for: "${searchTerm}"`)
       await performAISearch(searchTerm)
     } catch (error) {
-      console.error('AI search failed:', error)
+      // AI search failed silently
     }
   }
 
@@ -194,7 +193,9 @@ const AISearchSection = ({
               <p className='text-blue-800 text-sm mb-2'>{aiSearchMessage}</p>
               {aiSearchSuggestions && aiSearchSuggestions.length > 0 && (
                 <div className='flex flex-wrap gap-2 mt-3'>
-                  <span className='text-blue-700 text-xs font-medium'>Try:</span>
+                  <span className='text-blue-700 text-xs font-medium'>
+                    Try:
+                  </span>
                   {aiSearchSuggestions.map((suggestion, index) => (
                     <span
                       key={index}

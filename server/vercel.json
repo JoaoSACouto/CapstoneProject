@@ -4,17 +4,9 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "api/ai-search.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
-    {
-      "src": "/api/ai-search",
-      "dest": "/api/ai-search.js"
-    },
     {
       "src": "/(.*)",
       "dest": "/server.js"
