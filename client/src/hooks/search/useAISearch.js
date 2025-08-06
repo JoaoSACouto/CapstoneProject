@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { showSuccessToast, showErrorToast } from '../../utils/toast'
+import { getApiUrl } from '../../utils/config'
 
 /**
  * AI Search Hook
@@ -46,13 +47,11 @@ export const useAISearch = () => {
     setHasSearched(false)
 
     try {
-      console.log(`Starting AI search for: "${query}"`)
-
       // Get auth token from localStorage or context
       const token =
         localStorage.getItem('token') || sessionStorage.getItem('token')
 
-      const response = await fetch('/api/ai-search', {
+      const response = await fetch(getApiUrl('/api/ai-search'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,24 +66,21 @@ export const useAISearch = () => {
 
       // Clone response to read text if JSON parsing fails
       const responseClone = response.clone()
-      
+
       let data
       try {
         data = await response.json()
       } catch (jsonError) {
-        console.error('JSON parsing failed:', jsonError)
         try {
           const text = await responseClone.text()
-          console.error('Response text:', text.substring(0, 500))
-          
+
           // Check if it's HTML error page
           if (text.includes('<html>') || text.includes('<!DOCTYPE')) {
             throw new Error('Server returned HTML error page instead of JSON')
           }
-          
+
           throw new Error('Invalid JSON response from server')
         } catch (textError) {
-          console.error('Could not read response text:', textError)
           throw new Error('Server response could not be parsed')
         }
       }
@@ -156,7 +152,7 @@ export const useAISearch = () => {
    */
   const checkAIAvailability = async () => {
     try {
-      const response = await fetch('/api/ai-search/status')
+      const response = await fetch(getApiUrl('/api/ai-search/status'))
       const data = await response.json()
       return data.available || false
     } catch (error) {
@@ -164,7 +160,6 @@ export const useAISearch = () => {
       return false
     }
   }
-
 
   return {
     // State
