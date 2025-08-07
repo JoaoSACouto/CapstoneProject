@@ -7,7 +7,7 @@ This guide provides step-by-step instructions for setting up the RestJAM local d
 Before you begin, ensure you have the following installed on your system:
 
 ### Required Software
-- **Node.js 18+** - [Download from nodejs.org](https://nodejs.org/)
+- **Node.js 18+** (Node.js 20+ recommended) - [Download from nodejs.org](https://nodejs.org/)
 - **npm** (comes with Node.js) or **yarn** package manager
 - **MongoDB** - [Download MongoDB Community Server](https://www.mongodb.com/try/download/community)
 - **Git** - [Download from git-scm.com](https://git-scm.com/)
@@ -15,7 +15,7 @@ Before you begin, ensure you have the following installed on your system:
 ### Required Accounts & API Keys
 - **Firebase Project** with Authentication enabled - [Firebase Console](https://console.firebase.google.com/)
 - **Cloudinary Account** for image storage - [Cloudinary](https://cloudinary.com/)
-- **Google Gemini AI API Key** for AI-enhanced search (optional) - [Google AI Studio](https://makersuite.google.com/app/apikey)
+- **Google Gemini AI API Key** for AI-enhanced search (optional) - [Google AI Studio](https://aistudio.google.com/app/apikey)
 - **Stripe Account** for payment processing (optional) - [Stripe](https://stripe.com/)
 - **Google Maps API Key** for location features (optional) - [Google Cloud Console](https://console.cloud.google.com/)
 
@@ -81,6 +81,7 @@ STRIPE_SECRET_KEY=sk_test_...
 
 # Google Gemini AI (for enhanced search)
 GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-1.5-flash
 
 # Client Configuration (for CORS and Stripe redirects)
 CLIENT_URL=https://your-deployed-client-domain.com
@@ -121,6 +122,7 @@ VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 
 # AI Search Configuration
 VITE_ENABLE_AI_SEARCH=true
+VITE_AI_SEARCH_ENDPOINT=/api/ai-search
 
 # Firebase Client Configuration
 VITE_FIREBASE_API_KEY=your-api-key-here
@@ -189,7 +191,7 @@ The application will automatically create the database and collections when you 
 
 ### 9. Configure AI-Enhanced Search
 
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
 2. Sign in with your Google account
 3. Click "Create API Key" 
 4. Copy the generated API key
@@ -255,10 +257,13 @@ npm start
 npm run dev
 ```
 
-### 12. Seed database (rating table)
+## 🗄️ Database Seeding
+
+### 12. Seed Database (Rating Table)
 ```bash
-cd /server/scripts/
+cd server/scripts
 node seedRatings.js
+```
 
 ## 🧪 Testing
 
