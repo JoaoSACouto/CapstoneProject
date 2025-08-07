@@ -55,13 +55,13 @@ export const UI_TEXT = {
     loginHero: {
         title: "Welcome Back",
         description:
-            "Welcome to RestJam! We're excited to have you here. Please log in or sign up to explore our vibrant community and discover amazing experiences.",
+            "Welcome to RestJAM! We're excited to have you here. Please log in or sign up to explore our vibrant community and discover amazing experiences.",
         button: "Log in",
     },
     signupHero: {
         title: "Signup",
         description:
-            "Welcome to RestJam! We're excited to have you here. Please log in or sign up to explore our vibrant community and discover amazing experiences.",
+            "Welcome to RestJAM! We're excited to have you here. Please log in or sign up to explore our vibrant community and discover amazing experiences.",
         button: "Log in",
     },
     detailHero: {
