@@ -107,7 +107,7 @@ const Profile = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8">
+        <div className="min-h-screen">
             <ConfirmDialog {...dialogProps} loading={toggleLoading} />
             <ProfilePicModal 
                 isOpen={isProfilePicModalOpen}
@@ -118,7 +118,7 @@ const Profile = () => {
                 {/* Hero Section */}
                 <Hero
                     heroImage={heroImage}
-                    title="Rest Jam Profile"
+                    title="Rest JAM Profile"
                     description=""
                     showButton={false}
                     className="h-[200px] md:h-[240px] lg:h-[280px]"
