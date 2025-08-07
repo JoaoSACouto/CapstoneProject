@@ -22,7 +22,7 @@ const Profile = () => {
     const user = useSelector((state) => state.user.data);
     const authInitialized = useSelector((state) => state.user.authInitialized);
     const { confirmDelete, dialogProps } = useConfirmDialog();
-    
+
     // Profile picture modal state
     const [isProfilePicModalOpen, setIsProfilePicModalOpen] = useState(false);
 
@@ -109,7 +109,7 @@ const Profile = () => {
     return (
         <div className="min-h-screen">
             <ConfirmDialog {...dialogProps} loading={toggleLoading} />
-            <ProfilePicModal 
+            <ProfilePicModal
                 isOpen={isProfilePicModalOpen}
                 onClose={handleProfilePicModalClose}
                 onUpdate={handleProfilePicUpdate}
@@ -143,7 +143,7 @@ const Profile = () => {
 
                         {/* Avatar */}
                         <div>
-                            <ProfileAvatar 
+                            <ProfileAvatar
                                 onClick={handleAvatarClick}
                                 className="h-24 w-24 md:h-32 md:w-32"
                             />
@@ -159,8 +159,6 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
-
-
 
                     {/* Links */}
                     <div className="mt-6 flex flex-col items-center space-y-2">
@@ -313,132 +311,133 @@ const Profile = () => {
                             {/* Desktop Table */}
                             <div className="hidden md:block overflow-x-auto">
                                 <table className="w-7/8 mx-auto text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
-                                    <thead className="text-gray-700 uppercase bg-gray-100">
-                                        <tr>
-                                            <th className="px-3 py-2 text-center">
-                                                ID
-                                            </th>
-                                            <th className="px-3 py-2 text-left">
-                                                User
-                                            </th>
-                                            <th className="px-3 py-2  text-left">
-                                                Title
-                                            </th>
-                                            <th className="px-3 py-2  text-left">
-                                                Address
-                                            </th>
-                                            <th className="px-3 py-2 text-right">
-                                                Action
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {goingList.map((item, index) => (
-                                            <tr
-                                                key={item.id}
-                                                onClick={() =>
-                                                    navigate(item.url)
-                                                }
-                                                className="cursor-pointer odd:bg-gray-50 font-semibold even:bg-gray-100 hover:bg-gray-200 transition"
-                                            >
-                                                <td className="px-3 py-2 text-center">
-                                                    {index + 1}
-                                                </td>
+                                <thead className="text-gray-700 uppercase bg-gray-100">
+  <tr>
+    {/* ID - hidden below xl */}
+    <th className="px-2 py-2 text-center hidden xl:table-cell">ID</th>
 
-                                                {/* User Column */}
-                                                <td className="px-3 py-2 flex items-center gap-3 font-semibold">
-                                                    <img
-                                                        src={
-                                                            item.author
-                                                                ?.photoURL ||
-                                                            "https://img.daisyui.com/images/profile/demo/1@94.webp"
-                                                        }
-                                                        alt={
-                                                            item.author
-                                                                ?.displayName ||
-                                                            "User"
-                                                        }
-                                                        className="h-8 w-8 rounded-full object-cover"
-                                                    />
-                                                    <div className="flex flex-col">
-                                                        <span className="font-medium truncate font-semibold">
-                                                            {item.author
-                                                                ?.displayName ||
-                                                                "Unknown User"}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                {/* Title */}
-                                                <td className="px-3 py-2 truncate font-semibold">
-                                                    {item.title}
-                                                </td>
+    {/* User info - hidden below xl */}
+    <th className="px-2 py-2 text-left hidden xl:table-cell">User</th>
 
-                                                {/* Address */}
-                                                <td className="px-3 py-2 text-gray-600 truncate">
-                                                    {item.location}
-                                                </td>
+    {/* Title - always visible */}
+    <th className="px-2 py-2 text-left text-xs sm:text-sm">Title</th>
 
-                                                {/* Action */}
-                                                <td className="px-3 py-2 text-right">
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            handleRemove(
-                                                                item.id
-                                                            );
-                                                        }}
-                                                        className="cursor-pointer bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-3 py-1 rounded-full"
-                                                    >
-                                                        Remove
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
+    {/* Address - hidden below 1060px */}
+    <th className="px-2 py-2 text-left hidden xl:table-cell max-[1060px]:hidden">
+      Address
+    </th>
+
+    {/* Action */}
+    <th className="px-2 py-2 text-right text-xs sm:text-sm">Action</th>
+  </tr>
+</thead>
+
+<tbody>
+  {goingList.map((item, index) => (
+    <tr
+      key={item.id}
+      onClick={() => navigate(item.url)}
+      className="cursor-pointer odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
+    >
+      {/* ID */}
+      <td className="px-2 py-2 text-center hidden xl:table-cell text-xs">
+        {index + 1}
+      </td>
+
+      {/* User */}
+      <td className="px-2 py-2 hidden xl:table-cell text-xs">
+        <div className="flex items-center gap-2">
+          <img
+            src={
+              item.author?.photoURL ||
+              "https://img.daisyui.com/images/profile/demo/1@94.webp"
+            }
+            alt="User"
+            className="h-6 w-6 rounded-full object-cover"
+          />
+          <span className="truncate">{item.author?.displayName || "User"}</span>
+        </div>
+      </td>
+
+      {/* Title */}
+      <td className="px-2 py-2 truncate text-xs sm:text-sm">{item.title}</td>
+
+      {/* Address */}
+      <td className="px-2 py-2 text-gray-600 truncate hidden xl:table-cell max-[1060px]:hidden text-xs">
+        {item.location}
+      </td>
+
+      {/* Action */}
+      <td className="px-2 py-2 text-right">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemove(item.id);
+          }}
+          className="bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] px-3 py-1 rounded-full"
+        >
+          Remove
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
                                 </table>
                             </div>
 
                             {/* Mobile Cards */}
-                            <div className="md:hidden rounded-lg bg-white shadow-md w-7/8 mx-auto">
-                                {/* Header for mobile */}
-                                <div className="bg-gray-100 text-gray-700 uppercase text-xs px-4 py-2 flex justify-between font-semibold">
-                                    <span className="w-1/3">ID</span>
-                                    <span className="w-2/3 ">Title</span>
-                                    <span className="w-1/3 text-right">
-                                        Action
-                                    </span>
+                            <div className="md:hidden w-11/12 mx-auto rounded-lg bg-white shadow-md overflow-hidden">
+                                <div className="bg-gray-100 text-gray-700 uppercase text-xs px-4 py-2 font-semibold">
+                                    Going List
                                 </div>
 
-                                {/* Card rows */}
                                 {goingList.map((item, index) => (
                                     <div
                                         key={item.id}
-                                        className="flex justify-between items-center p-4 odd:bg-gray-50 even:bg-gray-200 font-semibold"
+                                        className="flex flex-col p-3 odd:bg-gray-50 even:bg-gray-100 text-xs gap-y-1"
                                         onClick={() => navigate(item.url)}
                                     >
-                                        <div className="w-1/3">
-                                            <p className="text-sm font-semibold">
-                                                {index + 1}
-                                            </p>
-                                        </div>
-                                        <div className="w-2/3">
-                                            <p className="text-sm font-semibold truncate">
-                                                {item.title}
-                                            </p>
-                                            <p className="text-xs text-gray-600 truncate">
-                                                {item.location}
-                                            </p>
-                                        </div>
-                                        <div className="w-1/3 text-right">
+                                        {/* Row 1 */}
+                                        <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-y-1">
+                                            <span className="font-bold text-[11px]">
+                                                #{index + 1}
+                                            </span>
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleRemove(item.id);
                                                 }}
-                                                className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded-full"
+                                                className="bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] px-3 py-1 rounded-full"
                                             >
                                                 Remove
                                             </button>
+                                        </div>
+
+                                        {/* Row 2: Title and Location */}
+                                        <div className="flex flex-col">
+                                            <p className="text-[11px] font-semibold truncate break-words">
+                                                {item.title}
+                                            </p>
+                                            <p className="text-[10px] text-gray-600 truncate break-words">
+                                                {item.location}
+                                            </p>
+                                        </div>
+
+                                        {/* Row 3: User */}
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <img
+                                                src={
+                                                    item.author?.photoURL ||
+                                                    "https://img.daisyui.com/images/profile/demo/1@94.webp"
+                                                }
+                                                alt="User"
+                                                className="h-5 w-5 rounded-full object-cover shrink-0"
+                                            />
+                                            <span className="text-[10px] text-gray-700 truncate break-words">
+                                                {item.author?.displayName ||
+                                                    "User"}
+                                            </span>
                                         </div>
                                     </div>
                                 ))}
