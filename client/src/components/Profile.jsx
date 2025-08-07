@@ -118,7 +118,7 @@ const Profile = () => {
                 {/* Hero Section */}
                 <Hero
                     heroImage={heroImage}
-                    title="Rest Jam Profile"
+                    title="Rest JAM Profile"
                     description=""
                     showButton={false}
                     className="h-[200px] md:h-[240px] lg:h-[280px]"
