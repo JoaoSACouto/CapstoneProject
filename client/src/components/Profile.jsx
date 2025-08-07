@@ -311,78 +311,96 @@ const Profile = () => {
                             {/* Desktop Table */}
                             <div className="hidden md:block overflow-x-auto">
                                 <table className="w-7/8 mx-auto text-xs sm:text-sm text-left bg-white shadow-md rounded-xl">
-                                <thead className="text-gray-700 uppercase bg-gray-100">
-  <tr>
-    {/* ID - hidden below xl */}
-    <th className="px-2 py-2 text-center hidden xl:table-cell">ID</th>
+                                    <thead className="text-gray-700 uppercase bg-gray-100">
+                                        <tr>
+                                            {/* ID - hidden below xl */}
+                                            <th className="px-2 py-2 text-center hidden xl:table-cell">
+                                                ID
+                                            </th>
 
-    {/* User info - hidden below xl */}
-    <th className="px-2 py-2 text-left hidden xl:table-cell">User</th>
+                                            {/* User info - hidden below xl */}
+                                            <th className="px-2 py-2 text-left hidden xl:table-cell">
+                                                User
+                                            </th>
 
-    {/* Title - always visible */}
-    <th className="px-2 py-2 text-left text-xs sm:text-sm">Title</th>
+                                            {/* Title - always visible */}
+                                            <th className="px-2 py-2 text-left text-xs sm:text-sm">
+                                                Title
+                                            </th>
 
-    {/* Address - hidden below 1060px */}
-    <th className="px-2 py-2 text-left hidden xl:table-cell max-[1060px]:hidden">
-      Address
-    </th>
+                                            {/* Address - hidden below 1060px */}
+                                            <th className="px-2 py-2 text-left hidden xl:table-cell max-[1060px]:hidden">
+                                                Address
+                                            </th>
 
-    {/* Action */}
-    <th className="px-2 py-2 text-right text-xs sm:text-sm">Action</th>
-  </tr>
-</thead>
+                                            {/* Action */}
+                                            <th className="px-2 py-2 text-right text-xs sm:text-sm">
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
 
-<tbody>
-  {goingList.map((item, index) => (
-    <tr
-      key={item.id}
-      onClick={() => navigate(item.url)}
-      className="cursor-pointer odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
-    >
-      {/* ID */}
-      <td className="px-2 py-2 text-center hidden xl:table-cell text-xs">
-        {index + 1}
-      </td>
+                                    <tbody>
+                                        {goingList.map((item, index) => (
+                                            <tr
+                                                key={item.id}
+                                                onClick={() =>
+                                                    navigate(item.url)
+                                                }
+                                                className="cursor-pointer odd:bg-gray-50 even:bg-gray-100 hover:bg-gray-200 transition"
+                                            >
+                                                {/* ID */}
+                                                <td className="px-2 py-2 text-center hidden xl:table-cell text-xs">
+                                                    {index + 1}
+                                                </td>
 
-      {/* User */}
-      <td className="px-2 py-2 hidden xl:table-cell text-xs">
-        <div className="flex items-center gap-2">
-          <img
-            src={
-              item.author?.photoURL ||
-              "https://img.daisyui.com/images/profile/demo/1@94.webp"
-            }
-            alt="User"
-            className="h-6 w-6 rounded-full object-cover"
-          />
-          <span className="truncate">{item.author?.displayName || "User"}</span>
-        </div>
-      </td>
+                                                {/* User */}
+                                                <td className="px-2 py-2 hidden xl:table-cell text-xs">
+                                                    <div className="flex items-center gap-2">
+                                                        <img
+                                                            src={
+                                                                item.author
+                                                                    ?.photoURL ||
+                                                                "https://img.daisyui.com/images/profile/demo/1@94.webp"
+                                                            }
+                                                            alt="User"
+                                                            className="h-6 w-6 rounded-full object-cover"
+                                                        />
+                                                        <span className="truncate">
+                                                            {item.author
+                                                                ?.displayName ||
+                                                                "User"}
+                                                        </span>
+                                                    </div>
+                                                </td>
 
-      {/* Title */}
-      <td className="px-2 py-2 truncate text-xs sm:text-sm">{item.title}</td>
+                                                {/* Title */}
+                                                <td className="px-2 py-2 truncate text-xs sm:text-sm">
+                                                    {item.title}
+                                                </td>
 
-      {/* Address */}
-      <td className="px-2 py-2 text-gray-600 truncate hidden xl:table-cell max-[1060px]:hidden text-xs">
-        {item.location}
-      </td>
+                                                {/* Address */}
+                                                <td className="px-2 py-2 text-gray-600 truncate hidden xl:table-cell max-[1060px]:hidden text-xs">
+                                                    {item.location}
+                                                </td>
 
-      {/* Action */}
-      <td className="px-2 py-2 text-right">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleRemove(item.id);
-          }}
-          className="bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] px-3 py-1 rounded-full"
-        >
-          Remove
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+                                                {/* Action */}
+                                                <td className="px-2 py-2 text-right">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleRemove(
+                                                                item.id
+                                                            );
+                                                        }}
+                                                        className="bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] px-3 py-1 rounded-full"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
                                 </table>
                             </div>
 
