@@ -11,7 +11,7 @@ https://capstone-project-amber-one.vercel.app/
 
 **Current Phase**: Sprint 4 Complete ✅  
 **Status**: Production Ready & Deployed  
-**Last Updated**: July 2025
+**Last Updated**: August 2025
 
 ## 🔗 Project Links
 

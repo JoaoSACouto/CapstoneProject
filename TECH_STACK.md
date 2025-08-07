@@ -7,7 +7,7 @@ This document provides a comprehensive overview of the technology stack used in 
 ### Core Framework & Runtime
 - **React 19.1.0** - Primary frontend framework for building user interfaces
 - **Vite 6.3.5** - Build tool and development server for fast development experience
-- **Node.js 18+** - JavaScript runtime environment
+- **Node.js 18+** (Node.js 20+ recommended) - JavaScript runtime environment
 
 ### State Management & Data Fetching
 - **Apollo Client 3.13.8** - GraphQL client for data fetching and caching
@@ -35,6 +35,12 @@ This document provides a comprehensive overview of the technology stack used in 
 - **TipTap Starter Kit 2.23.1** - Essential TipTap extensions
 - **ProseMirror View 1.40.0** - Editor view layer
 - **DOMPurify 3.2.6** - DOM sanitization library
+
+### HTTP Client & Network
+- **Axios 1.10.0** - HTTP client for API requests
+
+### Image Gallery & Lightbox
+- **Yet Another React Lightbox 3.25.0** - Image gallery and lightbox component
 
 ### User Experience Features
 - **Emoji Mart 5.6.0** - Emoji picker component
@@ -67,7 +73,7 @@ This document provides a comprehensive overview of the technology stack used in 
 ### File Processing & Storage
 - **Cloudinary 2.7.0** - Cloud-based image and video management
 - **Multer 2.0.1** - Multipart/form-data file upload handling
-- **Sharp 0.34.2** - High-performance image processing
+- **Sharp 0.34.3** - High-performance image processing
 - **Streamifier 0.1.1** - Convert buffers to streams
 
 ### Payment Processing
@@ -75,7 +81,7 @@ This document provides a comprehensive overview of the technology stack used in 
 - **@stripe/stripe-js 7.4.0** - Stripe JavaScript SDK
 
 ### AI & Machine Learning
-- **@google/generative-ai** - Google Gemini AI SDK for natural language processing
+- **@google/generative-ai 0.24.1** - Google Gemini AI SDK for natural language processing
 
 ### Utilities & Development
 - **Lodash 4.17.21** - JavaScript utility library
@@ -125,8 +131,8 @@ This document provides a comprehensive overview of the technology stack used in 
 
 ### Authentication Provider
 - **Firebase Authentication** - Google's authentication service
-  - **Client-side**: Firebase Web SDK for user authentication
-  - **Server-side**: Firebase Admin SDK for token verification
+  - **Client-side**: Firebase Web SDK 11.8.1 for user authentication
+  - **Server-side**: Firebase Admin SDK 13.4.0 for token verification
   - **Methods**: Email/Password, Google Sign-In
   - **Features**: JWT token validation, user management
 
@@ -140,9 +146,10 @@ This document provides a comprehensive overview of the technology stack used in 
 
 ### AI & Machine Learning Services
 - **Google Gemini AI** - Generative AI for natural language processing
-  - **Integration**: @google/generative-ai SDK for keyword extraction
+  - **Integration**: @google/generative-ai SDK v0.24.1 for keyword extraction
   - **Features**: Natural language query understanding, keyword optimization
   - **Model**: Gemini-1.5-flash for fast response times
+  - **API Endpoint**: `/api/ai-search` for AI-enhanced search functionality
   - **Fallback**: Graceful degradation to regular search when unavailable
 
 ### Image & Media Management
