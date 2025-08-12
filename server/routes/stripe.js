@@ -7,6 +7,31 @@ require("dotenv").config();
 router.post("/create-checkout-session", async (req, res) => {
     const { amount, name, email } = req.body;
 
+    // Validate required environment variables
+    if (!process.env.STRIPE_SECRET_KEY) {
+        console.error("❌ STRIPE_SECRET_KEY not configured");
+        return res.status(500).json({ 
+            error: "Payment service not configured",
+            details: "Stripe secret key missing"
+        });
+    }
+
+    if (!process.env.FRONTEND_URL) {
+        console.error("❌ FRONTEND_URL not configured");
+        return res.status(500).json({ 
+            error: "Payment service not configured",
+            details: "Frontend URL missing"
+        });
+    }
+
+    // Validate input
+    if (!amount || typeof amount !== 'number' || amount <= 0) {
+        return res.status(400).json({ 
+            error: "Invalid amount",
+            details: "Amount must be a positive number"
+        });
+    }
+
     try {
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
@@ -23,16 +48,31 @@ router.post("/create-checkout-session", async (req, res) => {
                 },
             ],
             mode: "payment",
-            // using dynamic URLs from environment variables
-            success_url: `${process.env.FRONTEND_URL}/`,
-            cancel_url: `${process.env.FRONTEND_URL}/`,
+            success_url: `${process.env.FRONTEND_URL}/donate/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.FRONTEND_URL}/donate/cancel`,
             customer_email: email || undefined,
         });
 
-        res.json({ id: session.id });
+        console.log("✅ Stripe session created:", session.id);
+        res.json({ id: session.id, url: session.url });
     } catch (error) {
         console.error("❌ Stripe error:", error.message);
-        res.status(500).json({ error: "Stripe session creation failed" });
+        console.error("❌ Stripe error details:", error);
+        
+        // Provide more specific error messages
+        let errorMessage = "Payment session creation failed";
+        if (error.type === 'StripeInvalidRequestError') {
+            errorMessage = "Invalid payment request";
+        } else if (error.type === 'StripeAuthenticationError') {
+            errorMessage = "Payment service authentication failed";
+        } else if (error.type === 'StripePermissionError') {
+            errorMessage = "Payment service permission denied";
+        }
+        
+        res.status(500).json({ 
+            error: errorMessage,
+            details: error.message
+        });
     }
 });
 
