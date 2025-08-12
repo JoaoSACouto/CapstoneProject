@@ -86,17 +86,43 @@ const Donate = () => {
 
                             const data = await response.json();
 
+                            if (!response.ok) {
+                                throw new Error(data.error || data.details || "Payment session creation failed");
+                            }
+
                             if (!data.id) {
-                                throw new Error("Session creation failed");
+                                throw new Error("Session creation failed - no session ID returned");
                             }
 
                             const stripe = await stripePromise;
-                            await stripe.redirectToCheckout({
+                            if (!stripe) {
+                                throw new Error("Stripe failed to load");
+                            }
+
+                            const { error } = await stripe.redirectToCheckout({
                                 sessionId: data.id,
                             });
+
+                            if (error) {
+                                throw new Error(error.message || "Failed to redirect to payment page");
+                            }
                         } catch (error) {
                             console.error("Stripe checkout error:", error);
-                            alert("Something went wrong. Please try again.");
+                            
+                            // Provide user-friendly error messages
+                            let userMessage = "Something went wrong. Please try again.";
+                            
+                            if (error.message.includes("Payment service not configured")) {
+                                userMessage = "Payment service is currently unavailable. Please try again later.";
+                            } else if (error.message.includes("Invalid amount")) {
+                                userMessage = "Please enter a valid donation amount.";
+                            } else if (error.message.includes("Stripe failed to load")) {
+                                userMessage = "Payment system is loading. Please try again in a moment.";
+                            } else if (error.message.includes("Failed to redirect")) {
+                                userMessage = "Unable to open payment page. Please check your internet connection and try again.";
+                            }
+                            
+                            alert(userMessage);
                         }
                     }}
                 >
