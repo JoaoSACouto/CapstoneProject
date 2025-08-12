@@ -26,7 +26,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 // Utilities
 const { createGraphQLContext } = require('./utils/graphqlContext')
 const { ensureDefaultRatings, cleanupOrphanedPosts } = require('./utils/dbSeed')
-const { validateEnvVars } = require('./utils/config')
 
 // GraphQL imports
 const typeDefs = require('./graphql/typeDefs')
@@ -108,9 +107,6 @@ const limiter = rateLimit({
 // Server startup function
 async function startServer() {
   try {
-    // Validate environment variables first
-    validateEnvVars()
-    
     // Start Apollo Server
     await server.start()
     console.log('🚀 Apollo Server started')
