@@ -86,6 +86,10 @@ const Donate = () => {
 
                             const data = await response.json();
 
+                            if (!response.ok) {
+                                throw new Error(data.error || "Payment service error");
+                            }
+
                             if (!data.id) {
                                 throw new Error("Session creation failed");
                             }
@@ -96,7 +100,7 @@ const Donate = () => {
                             });
                         } catch (error) {
                             console.error("Stripe checkout error:", error);
-                            alert("Something went wrong. Please try again.");
+                            alert(error.message || "Something went wrong. Please try again.");
                         }
                     }}
                 >
